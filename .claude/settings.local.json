@@ -1,0 +1,40 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pip install:*)",
+      "Bash(python3 -c ':*)",
+      "Bash(npx create-next-app@latest apps/web --typescript --tailwind --eslint --app --src-dir=false --import-alias=\"@/*\" --no-turbopack --use-npm)",
+      "Bash(npx create-next-app@latest web --typescript --tailwind --eslint --app --no-src-dir --import-alias=\"@/*\" --no-turbopack --use-npm)",
+      "Bash(npm install:*)",
+      "Bash(npx next:*)",
+      "Bash(mkdir:*)",
+      "Bash(taskkill /F /IM node.exe)",
+      "Bash(netstat -ano)",
+      "Bash(taskkill /F /PID 70636)",
+      "Bash(wmic process:*)",
+      "Bash(tasklist /FI \"PID eq 70636\")",
+      "Bash(taskkill /F /PID 70636 /T)",
+      "Bash(taskkill /F /IM node.exe /T)",
+      "Bash(npx tsx:*)",
+      "Bash(gh auth:*)",
+      "Bash(gh repo:*)",
+      "Bash(vercel --version)",
+      "Bash(railway --version)",
+      "Bash(vercel whoami:*)",
+      "Bash(railway whoami:*)",
+      "Bash(railway init:*)",
+      "Bash(railway list:*)",
+      "Bash(railway delete:*)",
+      "Bash(railway link:*)",
+      "Bash(railway variables:*)",
+      "Bash(railway service:*)",
+      "Bash(railway up:*)",
+      "Bash(railway domain:*)",
+      "Bash(curl -s https://docandscore-api-production.up.railway.app/health)",
+      "Bash(vercel --yes --prod)",
+      "Bash(vercel env:*)",
+      "Bash(npx tsc:*)",
+      "Bash(./node_modules/.bin/tsc)"
+    ]
+  }
+}
