@@ -119,16 +119,16 @@ export function DashboardScreen({
   onSelectTest: (test: Questionnaire) => void;
   onSelectQR: (test: Questionnaire) => void;
 }) {
-  const freeTests = QUESTIONNAIRES.filter((q) => !q.isPro && q.questions.length > 0);
-  const proTests = QUESTIONNAIRES.filter((q) => q.isPro);
+  const freeTests = QUESTIONNAIRES.filter((q) => q.questions.length > 0);
+  const proTests: Questionnaire[] = [];
 
   return (
     <div className="pb-24 px-4 pt-5 bg-ambient grain max-w-3xl mx-auto sm:px-6 lg:px-8">
       {/* Header */}
       <div className="flex justify-between items-center mb-2 animate-fade-in-up">
         <Logo size="md" />
-        <div className="px-3 py-1.5 rounded-full bg-ds-success/10 text-ds-success text-[11px] font-bold tracking-wide glow-success">
-          FREE
+        <div className="px-3 py-1.5 rounded-full bg-ds-sky/10 text-ds-sky text-[11px] font-bold tracking-wide">
+          BETA
         </div>
       </div>
 
@@ -145,23 +145,16 @@ export function DashboardScreen({
       {/* Active patient sessions */}
       <ActiveSessionsBubble />
 
-      {/* Pro Banner */}
-      <div
-        className="animate-fade-in-up stagger-2 relative overflow-hidden rounded-2xl p-4 mb-6 cursor-pointer group"
+      {/* Tests count banner */}
+      <div className="animate-fade-in-up stagger-2 relative overflow-hidden rounded-2xl p-4 mb-6"
         style={{
-          background: "linear-gradient(135deg, rgba(109,94,207,0.08) 0%, rgba(109,94,207,0.04) 100%)",
-          border: "1px solid rgba(109,94,207,0.12)",
+          background: "linear-gradient(135deg, rgba(74,154,191,0.08) 0%, rgba(74,154,191,0.04) 100%)",
+          border: "1px solid rgba(74,154,191,0.12)",
         }}
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-ds-pro/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-        <div className="flex items-center justify-between relative">
-          <span className="text-[13px] text-ds-pro font-semibold">
-            ⭐ Version gratuite — {freeTests.length} tests
-          </span>
-          <span className="text-xs text-ds-pro font-bold group-hover:translate-x-1 transition-transform duration-200">
-            Passer à Pro →
-          </span>
-        </div>
+        <span className="text-[13px] text-ds-sky font-semibold">
+          📋 {freeTests.length} tests cliniques disponibles
+        </span>
       </div>
 
       {/* Search card */}
@@ -233,42 +226,6 @@ export function DashboardScreen({
         ))}
       </div>
 
-      {/* Pro tests */}
-      <div className="mt-8 animate-fade-in-up">
-        <div className="flex items-center gap-2 mb-4">
-          <div className="w-1 h-5 rounded-full bg-gradient-to-b from-ds-pro to-[#8B7CE8]" />
-          <h2 className="text-[15px] font-bold text-ds-text-secondary uppercase tracking-wider">
-            Tests Pro
-          </h2>
-          <Badge variant="pro">PRO</Badge>
-          <span className="text-ds-text-muted text-xs font-mono">({proTests.length})</span>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-        {proTests.map((test) => (
-          <div
-            key={test.id}
-            className="ds-card p-4 opacity-60 hover:opacity-80 transition-opacity cursor-pointer"
-          >
-            <div className="flex items-center gap-3.5">
-              <div className="w-11 h-11 rounded-[12px] bg-gradient-to-br from-ds-pro-pale to-ds-pro/5 flex items-center justify-center text-[22px] shrink-0">
-                {test.icon}
-              </div>
-              <div className="flex-1">
-                <div className="flex items-center gap-2">
-                  <span className="font-mono font-bold text-ds-pro text-[13px]">{test.acronym}</span>
-                  <Badge variant="pro">PRO</Badge>
-                </div>
-                <p className="text-[12px] text-ds-text-muted mt-0.5">{test.pathology}</p>
-              </div>
-              <div className="w-8 h-8 rounded-full bg-ds-pro/5 flex items-center justify-center">
-                <span className="text-sm text-ds-pro/60">🔒</span>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
     </div>
   );
 }

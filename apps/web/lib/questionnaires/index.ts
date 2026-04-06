@@ -328,7 +328,7 @@ export const QUESTIONNAIRES: Questionnaire[] = [
     specialties: ["Neurologie", "Gériatrie"],
     pathology: "Troubles cognitifs légers",
     duration: "10 min",
-    isPro: true,
+    isPro: false,
     maxScore: 30,
     scoring: [
       { min: 26, max: 30, label: "Normal", severity: "normal", color: "#2db87d", action: "Pas de trouble cognitif" },
@@ -357,7 +357,7 @@ export const QUESTIONNAIRES: Questionnaire[] = [
     specialties: ["ORL", "Audiologie"],
     pathology: "Acouphènes",
     duration: "5 min",
-    isPro: true,
+    isPro: false,
     maxScore: 100,
     scoring: [
       { min: 0, max: 16, label: "Handicap léger (grade 1)", severity: "normal", color: "#2db87d", action: "Acouphènes perçus uniquement en environnement calme" },
@@ -406,7 +406,7 @@ export const QUESTIONNAIRES: Questionnaire[] = [
     specialties: ["Addictologie", "Médecine générale", "Psychiatrie"],
     pathology: "Troubles liés à l'usage d'alcool",
     duration: "3 min",
-    isPro: true,
+    isPro: false,
     maxScore: 40,
     scoring: [
       { min: 0, max: 7, label: "Consommation à faible risque", severity: "normal", color: "#2db87d", action: "Prévention primaire" },
@@ -439,7 +439,7 @@ export const QUESTIONNAIRES: Questionnaire[] = [
     specialties: ["Neurologie", "Urgences"],
     pathology: "AVC",
     duration: "6 min",
-    isPro: true,
+    isPro: false,
     maxScore: 42,
     scoring: [
       { min: 0, max: 0, label: "Pas de déficit neurologique", severity: "normal", color: "#2db87d" },
@@ -478,7 +478,7 @@ export const QUESTIONNAIRES: Questionnaire[] = [
     specialties: ["Gériatrie", "Médecine générale"],
     pathology: "Dépression gériatrique",
     duration: "5 min",
-    isPro: true,
+    isPro: false,
     maxScore: 15,
     scoring: [
       { min: 0, max: 5, label: "Normal", severity: "normal", color: "#2db87d", action: "Pas de dépression significative" },
@@ -515,7 +515,7 @@ export const QUESTIONNAIRES: Questionnaire[] = [
     specialties: ["Urologie", "Médecine générale"],
     pathology: "Hypertrophie bénigne de prostate",
     duration: "3 min",
-    isPro: true,
+    isPro: false,
     maxScore: 35,
     instruction: "Au cours du dernier mois",
     scoring: [
@@ -552,7 +552,7 @@ export const QUESTIONNAIRES: Questionnaire[] = [
     specialties: ["Addictologie", "Pneumologie", "Médecine générale"],
     pathology: "Dépendance tabagique",
     duration: "2 min",
-    isPro: true,
+    isPro: false,
     maxScore: 10,
     scoring: [
       { min: 0, max: 2, label: "Pas de dépendance", severity: "normal", color: "#2db87d", action: "Conseils d'arrêt, soutien motivationnel" },
@@ -734,7 +734,7 @@ export const QUESTIONNAIRES: Questionnaire[] = [
     specialties: ["ORL", "Allergologie", "Pneumologie"],
     pathology: "Rhinosinusite chronique, polypose",
     duration: "5 min",
-    isPro: true,
+    isPro: false,
     maxScore: 110,
     instruction: "Au cours des 2 dernières semaines",
     scoring: [
@@ -780,7 +780,7 @@ export const QUESTIONNAIRES: Questionnaire[] = [
     specialties: ["Pneumologie", "Allergologie", "Médecine générale"],
     pathology: "Asthme (contrôle)",
     duration: "2 min",
-    isPro: true,
+    isPro: false,
     maxScore: 25,
     instruction: "Au cours des 4 dernières semaines. Score inversé : 5 = meilleur contrôle",
     scoring: [
@@ -809,7 +809,7 @@ export const QUESTIONNAIRES: Questionnaire[] = [
     specialties: ["Pneumologie", "Allergologie"],
     pathology: "Asthme (contrôle)",
     duration: "2 min",
-    isPro: true,
+    isPro: false,
     maxScore: 6, // average score, not sum
     scoreMethod: "average",
     instruction: "Au cours de la dernière semaine. Score = moyenne des 5 items (0-6)",
@@ -843,7 +843,7 @@ export const QUESTIONNAIRES: Questionnaire[] = [
     specialties: ["Psychiatrie", "Médecine générale"],
     pathology: "Anxiété / Dépression",
     duration: "5 min",
-    isPro: true,
+    isPro: false,
     maxScore: 42,
     scoring: [
       { min: 0, max: 7, label: "Normal", severity: "normal", color: "#2db87d" },

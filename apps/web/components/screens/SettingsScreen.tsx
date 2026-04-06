@@ -6,7 +6,7 @@ export function SettingsScreen({ doctor }: { doctor: Doctor }) {
   const items = [
     { icon: "👤", label: "Modifier mon profil" },
     { icon: "🏥", label: "Changer de spécialité" },
-    { icon: "⭐", label: "Passer à Pro", badge: true },
+    { icon: "⭐", label: "Nouveautés", badge: false },
     { icon: "🔒", label: "Confidentialité" },
     { icon: "❓", label: "Aide & support" },
     { icon: "📄", label: "Mentions légales" },
@@ -25,7 +25,7 @@ export function SettingsScreen({ doctor }: { doctor: Doctor }) {
           <div>
             <div className="font-extrabold text-[16px] tracking-tight">{doctor.title} {doctor.firstName} {doctor.lastName}</div>
             <div className="text-ds-text-muted text-[13px] mb-1">dr.martin@gmail.com</div>
-            <Badge variant="free">Plan gratuit</Badge>
+            <Badge variant="sky">BETA</Badge>
           </div>
         </div>
       </div>

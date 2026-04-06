@@ -34,7 +34,11 @@
       "Bash(vercel --yes --prod)",
       "Bash(vercel env:*)",
       "Bash(npx tsc:*)",
-      "Bash(./node_modules/.bin/tsc)"
+      "Bash(./node_modules/.bin/tsc)",
+      "Bash(railway logs:*)",
+      "Bash(railway redeploy:*)",
+      "Bash(vercel domains:*)",
+      "Bash(curl -sI https://docandscore.fr)"
     ]
   }
 }

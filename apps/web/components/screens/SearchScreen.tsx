@@ -78,12 +78,11 @@ export function SearchScreen({
                     {test.acronym}
                   </span>
                   <span className="text-[13px] text-ds-text font-medium">{test.name}</span>
-                  {test.isPro && <Badge variant="pro">PRO</Badge>}
                 </div>
                 <p className="text-xs text-ds-text-muted mt-0.5">
                   {test.specialties.join(", ")} · {test.pathology} · {test.duration}
                 </p>
-                {!test.isPro && test.questions.length > 0 && (
+                {test.questions.length > 0 && (
                   <div className="flex gap-2 mt-2">
                     <Button size="sm" variant="primary" onClick={() => onSelectTest(test)}>📋 Médecin</Button>
                     <Button size="sm" variant="secondary" onClick={() => onSelectQR(test)}>📱 QR Patient</Button>
