@@ -11,7 +11,7 @@ import { PatientScreen } from "@/components/screens/PatientScreen";
 import { SettingsScreen } from "@/components/screens/SettingsScreen";
 import { BottomNav } from "@/components/ui/BottomNav";
 import { useState, useEffect } from "react";
-import { supabase } from "@/lib/supabase";
+import { supabase, loadProfile, saveProfile } from "@/lib/supabase";
 import type { Questionnaire } from "@/lib/types";
 
 export default function Home() {
@@ -24,18 +24,28 @@ export default function Home() {
 
   // Listen for Supabase auth state
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (session) {
-        // User is logged in — skip to onboarding or app
-        if (!doctor) setScreen("onboarding");
-        else setScreen("app");
+        const profile = await loadProfile();
+        if (profile) {
+          setDoctor(profile);
+          setScreen("app");
+        } else {
+          setScreen("onboarding");
+        }
       }
       setAuthReady(true);
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
       if (session && screen === "login") {
-        setScreen("onboarding");
+        const profile = await loadProfile();
+        if (profile) {
+          setDoctor(profile);
+          setScreen("app");
+        } else {
+          setScreen("onboarding");
+        }
       }
       if (!session) {
         setScreen("login");
@@ -46,8 +56,9 @@ export default function Home() {
   }, []);
 
   const handleLogin = () => setScreen("onboarding");
-  const handleOnboarding = (profile: { title: string; lastName: string; firstName: string; specialty: string }) => {
+  const handleOnboarding = async (profile: { title: string; lastName: string; firstName: string; specialty: string }) => {
     setDoctor(profile);
+    await saveProfile(profile);
     setScreen("app");
   };
   const handleSelectTest = (test: Questionnaire) => {

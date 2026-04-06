@@ -1,5 +1,6 @@
 "use client";
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 import type { Doctor, TestResult, Screen, AppTab } from "@/lib/types";
 import type { Questionnaire } from "@/lib/types";
 
@@ -18,23 +19,31 @@ interface AppState {
   goHome: () => void;
 }
 
-export const useAppStore = create<AppState>((set) => ({
-  screen: "login",
-  doctor: null,
-  activeTab: "dashboard",
-  selectedTest: null,
-  result: null,
-
-  setScreen: (screen) => set({ screen }),
-  setDoctor: (doctor) => set({ doctor }),
-  setActiveTab: (tab) => set({ activeTab: tab }),
-  setSelectedTest: (test) => set({ selectedTest: test }),
-  setResult: (result) => set({ result }),
-  goHome: () =>
-    set({
-      screen: "app",
+export const useAppStore = create<AppState>()(
+  persist(
+    (set) => ({
+      screen: "login",
+      doctor: null,
       activeTab: "dashboard",
       selectedTest: null,
       result: null,
+
+      setScreen: (screen) => set({ screen }),
+      setDoctor: (doctor) => set({ doctor }),
+      setActiveTab: (tab) => set({ activeTab: tab }),
+      setSelectedTest: (test) => set({ selectedTest: test }),
+      setResult: (result) => set({ result }),
+      goHome: () =>
+        set({
+          screen: "app",
+          activeTab: "dashboard",
+          selectedTest: null,
+          result: null,
+        }),
     }),
-}));
+    {
+      name: "ds_app",
+      partialize: (state) => ({ doctor: state.doctor }),
+    }
+  )
+);
