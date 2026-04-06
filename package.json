@@ -1,0 +1,5 @@
+{
+  "name": "docandscore-web",
+  "private": true,
+  "workspaces": ["apps/*"]
+}

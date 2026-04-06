@@ -1,0 +1,885 @@
+import type { Questionnaire, AnswerOption } from "../types";
+
+// Reusable option sets
+const LIKERT_0_3: AnswerOption[] = [
+  { value: 0, label: "Jamais" },
+  { value: 1, label: "Plusieurs jours" },
+  { value: 2, label: "Plus de la moitié du temps" },
+  { value: 3, label: "Presque tous les jours" },
+];
+
+const EPWORTH_OPTIONS: AnswerOption[] = [
+  { value: 0, label: "Aucune chance de s'endormir" },
+  { value: 1, label: "Faible chance" },
+  { value: 2, label: "Chance moyenne" },
+  { value: 3, label: "Forte chance" },
+];
+
+const YES_NO: AnswerOption[] = [
+  { value: 1, label: "Oui" },
+  { value: 0, label: "Non" },
+];
+
+const YES_NO_INVERTED: AnswerOption[] = [
+  { value: 0, label: "Oui" },
+  { value: 1, label: "Non" },
+];
+
+const THI_OPTIONS: AnswerOption[] = [
+  { value: 4, label: "Oui" },
+  { value: 2, label: "Parfois" },
+  { value: 0, label: "Non" },
+];
+
+const LIKERT_0_5: AnswerOption[] = [
+  { value: 0, label: "Jamais" },
+  { value: 1, label: "Moins d'une fois sur 5" },
+  { value: 2, label: "Moins d'une fois sur 2" },
+  { value: 3, label: "Environ une fois sur 2" },
+  { value: 4, label: "Plus d'une fois sur 2" },
+  { value: 5, label: "Presque toujours" },
+];
+
+const LIKERT_0_4: AnswerOption[] = [
+  { value: 0, label: "Aucun" },
+  { value: 1, label: "Léger" },
+  { value: 2, label: "Moyen" },
+  { value: 3, label: "Sévère" },
+  { value: 4, label: "Très sévère" },
+];
+
+const SNOT_OPTIONS: AnswerOption[] = [
+  { value: 0, label: "Aucun problème" },
+  { value: 1, label: "Très léger" },
+  { value: 2, label: "Léger" },
+  { value: 3, label: "Modéré" },
+  { value: 4, label: "Sévère" },
+  { value: 5, label: "Aussi grave que possible" },
+];
+
+const CAT_OPTIONS: AnswerOption[] = [
+  { value: 0, label: "0" },
+  { value: 1, label: "1" },
+  { value: 2, label: "2" },
+  { value: 3, label: "3" },
+  { value: 4, label: "4" },
+  { value: 5, label: "5" },
+];
+
+const DLQI_OPTIONS: AnswerOption[] = [
+  { value: 0, label: "Pas du tout" },
+  { value: 1, label: "Un petit peu" },
+  { value: 2, label: "Beaucoup" },
+  { value: 3, label: "Énormément" },
+];
+
+export const QUESTIONNAIRES: Questionnaire[] = [
+  // ====== PHQ-9 ======
+  {
+    id: "phq9",
+    acronym: "PHQ-9",
+    name: "Patient Health Questionnaire-9",
+    description: "Évaluation de la dépression",
+    icon: "💭",
+    category: "Psychiatrie",
+    specialties: ["Psychiatrie", "Médecine générale"],
+    pathology: "Dépression",
+    duration: "3 min",
+    isPro: false,
+    maxScore: 27,
+    instruction: "Au cours des 2 dernières semaines",
+    scoring: [
+      { min: 0, max: 4, label: "Minimal", severity: "normal", color: "#2db87d", action: "Aucune action nécessaire" },
+      { min: 5, max: 9, label: "Léger", severity: "mild", color: "#5cb85c", action: "Surveillance, réévaluation à 1 mois" },
+      { min: 10, max: 14, label: "Modéré", severity: "moderate", color: "#e8943a", action: "Envisager traitement (psychothérapie ou antidépresseur)" },
+      { min: 15, max: 19, label: "Modérément sévère", severity: "severe", color: "#e07030", action: "Traitement actif (antidépresseur et/ou psychothérapie)" },
+      { min: 20, max: 27, label: "Sévère", severity: "critical", color: "#e05252", action: "Traitement immédiat, envisager orientation psychiatrique" },
+    ],
+    questions: [
+      "Peu d'intérêt ou de plaisir à faire les choses",
+      "Se sentir triste, déprimé(e) ou désespéré(e)",
+      "Difficultés à s'endormir, sommeil interrompu, ou dormir trop",
+      "Se sentir fatigué(e) ou manquer d'énergie",
+      "Avoir peu d'appétit ou manger trop",
+      "Avoir une mauvaise opinion de soi-même, ou avoir le sentiment d'être nul(le), ou d'avoir déçu sa famille ou s'être déçu(e) soi-même",
+      "Avoir du mal à se concentrer, par exemple pour lire le journal ou regarder la télévision",
+      "Bouger ou parler si lentement que les autres ont pu le remarquer, ou au contraire, être si agité(e) que vous avez eu du mal à rester en place",
+      "Penser qu'il vaudrait mieux mourir ou envisager de vous faire du mal d'une manière ou d'une autre",
+    ].map((text) => ({ text, type: "likert" as const, options: LIKERT_0_3, maxPoints: 3 })),
+  },
+
+  // ====== GAD-7 ======
+  {
+    id: "gad7",
+    acronym: "GAD-7",
+    name: "Generalized Anxiety Disorder-7",
+    description: "Évaluation de l'anxiété",
+    icon: "😰",
+    category: "Psychiatrie",
+    specialties: ["Psychiatrie", "Médecine générale"],
+    pathology: "Anxiété généralisée",
+    duration: "2 min",
+    isPro: false,
+    maxScore: 21,
+    instruction: "Au cours des 2 dernières semaines",
+    scoring: [
+      { min: 0, max: 4, label: "Anxiété minimale", severity: "normal", color: "#2db87d", action: "Aucune action" },
+      { min: 5, max: 9, label: "Anxiété légère", severity: "mild", color: "#5cb85c", action: "Surveillance" },
+      { min: 10, max: 14, label: "Anxiété modérée", severity: "moderate", color: "#e8943a", action: "Envisager traitement" },
+      { min: 15, max: 21, label: "Anxiété sévère", severity: "severe", color: "#e05252", action: "Traitement actif recommandé" },
+    ],
+    questions: [
+      "Se sentir nerveux(se), anxieux(se) ou tendu(e)",
+      "Être incapable d'arrêter de s'inquiéter ou de contrôler ses inquiétudes",
+      "S'inquiéter trop à propos de différentes choses",
+      "Avoir du mal à se détendre",
+      "Être si agité(e) qu'il est difficile de rester tranquille",
+      "Devenir facilement contrarié(e) ou irritable",
+      "Avoir peur que quelque chose de terrible puisse arriver",
+    ].map((text) => ({ text, type: "likert" as const, options: LIKERT_0_3, maxPoints: 3 })),
+  },
+
+  // ====== PHQ-2 ======
+  {
+    id: "phq2",
+    acronym: "PHQ-2",
+    name: "Patient Health Questionnaire-2",
+    description: "Dépistage rapide de la dépression",
+    icon: "💭",
+    category: "Psychiatrie",
+    specialties: ["Médecine générale"],
+    pathology: "Dépistage dépression",
+    duration: "1 min",
+    isPro: false,
+    maxScore: 6,
+    instruction: "Dépistage ultra-court. Si ≥3 → faire PHQ-9",
+    scoring: [
+      { min: 0, max: 2, label: "Dépistage négatif", severity: "normal", color: "#2db87d", action: "Pas de dépression probable" },
+      { min: 3, max: 6, label: "Dépistage positif", severity: "alert", color: "#e8943a", action: "Faire le PHQ-9 complet" },
+    ],
+    questions: [
+      "Peu d'intérêt ou de plaisir à faire les choses",
+      "Se sentir triste, déprimé(e) ou désespéré(e)",
+    ].map((text) => ({ text, type: "likert" as const, options: LIKERT_0_3, maxPoints: 3 })),
+  },
+
+  // ====== EVA ======
+  {
+    id: "eva",
+    acronym: "EVA",
+    name: "Échelle Visuelle Analogique",
+    description: "Évaluation de la douleur",
+    icon: "⚡",
+    category: "Douleur",
+    specialties: ["Toutes spécialités"],
+    pathology: "Douleur (toute cause)",
+    duration: "30 sec",
+    isPro: false,
+    maxScore: 10,
+    scoring: [
+      { min: 0, max: 3, label: "Douleur légère", severity: "normal", color: "#2db87d", action: "Antalgique palier 1 si nécessaire" },
+      { min: 4, max: 6, label: "Douleur modérée", severity: "moderate", color: "#e8943a", action: "Antalgique palier 1-2, réévaluation" },
+      { min: 7, max: 10, label: "Douleur sévère", severity: "severe", color: "#e05252", action: "Antalgique palier 2-3, prise en charge urgente" },
+    ],
+    questions: [
+      {
+        text: "Indiquez l'intensité de votre douleur en ce moment, de 0 (aucune douleur) à 10 (douleur maximale imaginable)",
+        type: "slider",
+        options: Array.from({ length: 11 }, (_, i) => ({ value: i, label: String(i) })),
+        maxPoints: 10,
+        note: "Le patient déplace le curseur",
+      },
+    ],
+  },
+
+  // ====== EN ======
+  {
+    id: "en",
+    acronym: "EN",
+    name: "Échelle Numérique de la douleur",
+    description: "Évaluation de la douleur (verbal)",
+    icon: "⚡",
+    category: "Douleur",
+    specialties: ["Toutes spécialités"],
+    pathology: "Douleur (toute cause)",
+    duration: "30 sec",
+    isPro: false,
+    maxScore: 10,
+    scoring: [
+      { min: 0, max: 3, label: "Douleur légère", severity: "normal", color: "#2db87d" },
+      { min: 4, max: 6, label: "Douleur modérée", severity: "moderate", color: "#e8943a" },
+      { min: 7, max: 10, label: "Douleur sévère", severity: "severe", color: "#e05252" },
+    ],
+    questions: [
+      {
+        text: "Pouvez-vous donner une note de 0 à 10 pour situer le niveau de votre douleur ? 0 signifie 'pas de douleur' et 10 'la douleur maximale imaginable'",
+        type: "score",
+        options: Array.from({ length: 11 }, (_, i) => ({ value: i, label: String(i) })),
+        maxPoints: 10,
+        note: "Alternative verbale à l'EVA",
+      },
+    ],
+  },
+
+  // ====== DN4 ======
+  {
+    id: "dn4",
+    acronym: "DN4",
+    name: "Douleur Neuropathique en 4 questions",
+    description: "Diagnostic douleur neuropathique",
+    icon: "⚡",
+    category: "Douleur",
+    specialties: ["Neurologie", "Algologie", "Médecine générale"],
+    pathology: "Douleurs neuropathiques",
+    duration: "2 min",
+    isPro: false,
+    maxScore: 10,
+    scoring: [
+      { min: 0, max: 3, label: "Douleur neuropathique peu probable", severity: "normal", color: "#2db87d", action: "Chercher une autre étiologie" },
+      { min: 4, max: 10, label: "Douleur neuropathique probable", severity: "alert", color: "#e8943a", action: "Score ≥4/10 : sensibilité 83%, spécificité 90%. Traitement spécifique neuropathique" },
+    ],
+    questions: [
+      { text: "La douleur présente-t-elle des caractéristiques de brûlure ?", note: "Interrogatoire du patient" },
+      { text: "La douleur présente-t-elle des caractéristiques de froid douloureux ?", note: "Interrogatoire du patient" },
+      { text: "La douleur présente-t-elle des décharges électriques ?", note: "Interrogatoire du patient" },
+      { text: "La douleur est-elle associée à des fourmillements dans la même zone ?", note: "Interrogatoire du patient" },
+      { text: "La douleur est-elle associée à des picotements dans la même zone ?", note: "Interrogatoire du patient" },
+      { text: "La douleur est-elle associée à un engourdissement dans la même zone ?", note: "Interrogatoire du patient" },
+      { text: "La douleur est-elle associée à des démangeaisons dans la même zone ?", note: "Interrogatoire du patient" },
+      { text: "L'examen met-il en évidence une hypoesthésie au tact dans le territoire douloureux ?", note: "Examen clinique par le médecin" },
+      { text: "L'examen met-il en évidence une hypoesthésie à la piqûre dans le territoire douloureux ?", note: "Examen clinique par le médecin" },
+      { text: "La douleur est-elle provoquée ou augmentée par le frottement dans le territoire douloureux ?", note: "Examen clinique par le médecin (allodynie)" },
+    ].map((q) => ({ ...q, type: "yesno" as const, options: YES_NO, maxPoints: 1 })),
+  },
+
+  // ====== Epworth ======
+  {
+    id: "epworth",
+    acronym: "Epworth",
+    name: "Échelle de somnolence d'Epworth",
+    description: "Évaluation de la somnolence",
+    icon: "😴",
+    category: "Neurologie",
+    specialties: ["Neurologie", "Pneumologie", "ORL"],
+    pathology: "Somnolence diurne, apnées du sommeil",
+    duration: "2 min",
+    isPro: false,
+    maxScore: 24,
+    instruction: "Quelle est la probabilité que vous vous assoupissiez dans les situations suivantes ?",
+    scoring: [
+      { min: 0, max: 8, label: "Somnolence normale", severity: "normal", color: "#2db87d", action: "Pas de somnolence pathologique" },
+      { min: 9, max: 14, label: "Somnolence modérée", severity: "moderate", color: "#e8943a", action: "Exploration du sommeil recommandée" },
+      { min: 15, max: 24, label: "Somnolence sévère", severity: "severe", color: "#e05252", action: "Exploration urgente, rechercher SAOS, narcolepsie" },
+    ],
+    questions: [
+      "Assis(e) en train de lire",
+      "En train de regarder la télévision",
+      "Assis(e), inactif(ve), dans un lieu public (cinéma, réunion…)",
+      "Comme passager d'une voiture roulant sans arrêt pendant une heure",
+      "Allongé(e) pour se reposer l'après-midi",
+      "Assis(e) en train de parler à quelqu'un",
+      "Assis(e) au calme après un déjeuner sans alcool",
+      "Dans une voiture, immobilisé(e) quelques minutes dans un embouteillage",
+    ].map((text) => ({ text, type: "likert" as const, options: EPWORTH_OPTIONS, maxPoints: 3 })),
+  },
+
+  // ====== MMSE ======
+  {
+    id: "mmse",
+    acronym: "MMSE",
+    name: "Mini-Mental State Examination",
+    description: "Évaluation cognitive",
+    icon: "🧠",
+    category: "Neurologie",
+    specialties: ["Neurologie", "Gériatrie", "Psychiatrie"],
+    pathology: "Démences, troubles cognitifs",
+    duration: "10 min",
+    isPro: false,
+    maxScore: 30,
+    scoring: [
+      { min: 27, max: 30, label: "Normal", severity: "normal", color: "#2db87d", action: "Pas de trouble cognitif significatif" },
+      { min: 24, max: 26, label: "Troubles cognitifs légers", severity: "mild", color: "#e8943a", action: "Surveillance, bilan neuropsychologique recommandé" },
+      { min: 10, max: 23, label: "Démence modérée", severity: "moderate", color: "#e07030", action: "Bilan étiologique, prise en charge spécialisée" },
+      { min: 0, max: 9, label: "Démence sévère", severity: "critical", color: "#e05252", action: "Prise en charge spécialisée, mesures de protection" },
+    ],
+    questions: [
+      { text: "Orientation temporelle : date complète (année, saison, mois, jour du mois, jour de la semaine)", type: "score" as const, options: Array.from({ length: 6 }, (_, i) => ({ value: i, label: String(i) })), maxPoints: 5, note: "1 point par réponse correcte" },
+      { text: "Orientation spatiale : Où sommes-nous ? (pays, région, ville, hôpital/cabinet, étage)", type: "score" as const, options: Array.from({ length: 6 }, (_, i) => ({ value: i, label: String(i) })), maxPoints: 5, note: "1 point par réponse correcte" },
+      { text: "Apprentissage : Répétez 3 mots — CIGARE, FLEUR, PORTE", type: "score" as const, options: Array.from({ length: 4 }, (_, i) => ({ value: i, label: String(i) })), maxPoints: 3, note: "1 point par mot. Répéter jusqu'à 5 fois si nécessaire" },
+      { text: "Attention et calcul : Comptez à partir de 100 en retirant 7 (100, 93, 86, 79, 72, 65)", type: "score" as const, options: Array.from({ length: 6 }, (_, i) => ({ value: i, label: String(i) })), maxPoints: 5, note: "1 point par soustraction correcte" },
+      { text: "Rappel : Quels étaient les 3 mots ?", type: "score" as const, options: Array.from({ length: 4 }, (_, i) => ({ value: i, label: String(i) })), maxPoints: 3, note: "1 point par mot. Pas d'indice" },
+      { text: "Dénomination : Montrer un crayon et une montre", type: "score" as const, options: Array.from({ length: 3 }, (_, i) => ({ value: i, label: String(i) })), maxPoints: 2, note: "1 point par objet correctement nommé" },
+      { text: "Répétition : 'Pas de si, ni de mais'", type: "score" as const, options: [{ value: 0, label: "0" }, { value: 1, label: "1" }], maxPoints: 1, note: "1 point si correctement répété au 1er essai" },
+      { text: "Compréhension : Prenez cette feuille avec la main droite, pliez-la en deux, posez-la sur la table", type: "score" as const, options: Array.from({ length: 4 }, (_, i) => ({ value: i, label: String(i) })), maxPoints: 3, note: "1 point par étape correcte" },
+      { text: "Lecture : 'FERMEZ LES YEUX' — Lisez et faites ce qui est écrit", type: "score" as const, options: [{ value: 0, label: "0" }, { value: 1, label: "1" }], maxPoints: 1, note: "1 point si le patient ferme les yeux" },
+      { text: "Écriture : Écrivez une phrase de votre choix", type: "score" as const, options: [{ value: 0, label: "0" }, { value: 1, label: "1" }], maxPoints: 1, note: "1 point si sujet + verbe + sens" },
+      { text: "Praxie constructive : Recopiez les deux pentagones entrecroisés", type: "score" as const, options: [{ value: 0, label: "0" }, { value: 1, label: "1" }], maxPoints: 1, note: "1 point si 5 côtés chacun + intersection quadrilatère" },
+    ],
+  },
+
+  // ====== MoCA ======
+  {
+    id: "moca",
+    acronym: "MoCA",
+    name: "Montreal Cognitive Assessment",
+    description: "Évaluation cognitive avancée",
+    icon: "🧩",
+    category: "Neurologie",
+    specialties: ["Neurologie", "Gériatrie"],
+    pathology: "Troubles cognitifs légers",
+    duration: "10 min",
+    isPro: true,
+    maxScore: 30,
+    scoring: [
+      { min: 26, max: 30, label: "Normal", severity: "normal", color: "#2db87d", action: "Pas de trouble cognitif" },
+      { min: 18, max: 25, label: "Troubles cognitifs légers (MCI)", severity: "moderate", color: "#e8943a", action: "Bilan neuropsychologique complet recommandé. +1pt si scolarité ≤12 ans" },
+      { min: 0, max: 17, label: "Troubles cognitifs significatifs", severity: "critical", color: "#e05252", action: "Bilan étiologique urgent, orientation spécialisée" },
+    ],
+    questions: [
+      { text: "Visuospatial / Exécutif : TMT-B adapté + Copie du cube + Horloge", type: "score" as const, options: Array.from({ length: 6 }, (_, i) => ({ value: i, label: String(i) })), maxPoints: 5, note: "TMT-B (1pt) + cube (1pt) + horloge contour (1pt) + chiffres (1pt) + aiguilles (1pt)" },
+      { text: "Dénomination : 3 animaux (lion, rhinocéros, chameau)", type: "score" as const, options: Array.from({ length: 4 }, (_, i) => ({ value: i, label: String(i) })), maxPoints: 3, note: "1 point par animal" },
+      { text: "Attention : Empan direct + inverse + vigilance + soustractions", type: "score" as const, options: Array.from({ length: 7 }, (_, i) => ({ value: i, label: String(i) })), maxPoints: 6, note: "Empan direct (1pt) + inverse (1pt) + vigilance A (1pt) + soustractions (3pts)" },
+      { text: "Langage : Répéter 2 phrases + Fluence verbale (≥11 mots en F)", type: "score" as const, options: Array.from({ length: 4 }, (_, i) => ({ value: i, label: String(i) })), maxPoints: 3, note: "Phrase 1 (1pt) + Phrase 2 (1pt) + Fluence (1pt si ≥11)" },
+      { text: "Abstraction : Paires de mots (train-vélo, montre-règle)", type: "score" as const, options: Array.from({ length: 3 }, (_, i) => ({ value: i, label: String(i) })), maxPoints: 2, note: "1 point par paire correcte. Catégorie abstraite uniquement" },
+      { text: "Rappel différé : 5 mots (VISAGE, VELOURS, ÉGLISE, MARGUERITE, ROUGE)", type: "score" as const, options: Array.from({ length: 6 }, (_, i) => ({ value: i, label: String(i) })), maxPoints: 5, note: "1 point par mot rappelé spontanément" },
+      { text: "Orientation : Date + Lieu (6 éléments)", type: "score" as const, options: Array.from({ length: 7 }, (_, i) => ({ value: i, label: String(i) })), maxPoints: 6, note: "1 point par réponse correcte" },
+    ],
+  },
+
+  // ====== THI ======
+  {
+    id: "thi",
+    acronym: "THI",
+    name: "Tinnitus Handicap Inventory",
+    description: "Évaluation des acouphènes",
+    icon: "👂",
+    category: "ORL",
+    specialties: ["ORL", "Audiologie"],
+    pathology: "Acouphènes",
+    duration: "5 min",
+    isPro: true,
+    maxScore: 100,
+    scoring: [
+      { min: 0, max: 16, label: "Handicap léger (grade 1)", severity: "normal", color: "#2db87d", action: "Acouphènes perçus uniquement en environnement calme" },
+      { min: 18, max: 36, label: "Handicap modéré (grade 2)", severity: "mild", color: "#5cb85c", action: "Acouphènes facilement masqués, parfois oubliés" },
+      { min: 38, max: 56, label: "Handicap modéré à sévère (grade 3)", severity: "moderate", color: "#e8943a", action: "Acouphènes perçus même en présence de bruit de fond" },
+      { min: 58, max: 76, label: "Handicap sévère (grade 4)", severity: "severe", color: "#e07030", action: "Acouphènes quasi permanents" },
+      { min: 78, max: 100, label: "Handicap catastrophique (grade 5)", severity: "critical", color: "#e05252", action: "Retentissement majeur, orientation spécialisée urgente" },
+    ],
+    questions: [
+      "À cause de vos acouphènes, avez-vous des difficultés à vous concentrer ?",
+      "Le volume de vos acouphènes vous empêche-t-il d'entendre les gens ?",
+      "Vos acouphènes vous mettent-ils en colère ?",
+      "Vos acouphènes vous rendent-ils confus(e) ?",
+      "À cause de vos acouphènes, vous sentez-vous désespéré(e) ?",
+      "Vous plaignez-vous beaucoup de vos acouphènes ?",
+      "À cause de vos acouphènes, avez-vous du mal à vous endormir le soir ?",
+      "Avez-vous le sentiment de ne pas pouvoir échapper à vos acouphènes ?",
+      "Vos acouphènes interfèrent-ils avec vos activités sociales ?",
+      "À cause de vos acouphènes, vous sentez-vous frustré(e) ?",
+      "À cause de vos acouphènes, pensez-vous souffrir d'une maladie grave ?",
+      "Vos acouphènes rendent-ils difficile le plaisir de vivre ?",
+      "Vos acouphènes interfèrent-ils avec votre travail ou vos responsabilités ?",
+      "À cause de vos acouphènes, avez-vous souvent l'impression d'être irritable ?",
+      "À cause de vos acouphènes, est-il difficile pour vous de lire ?",
+      "Vos acouphènes vous contrarient-ils ?",
+      "Vos acouphènes ont-ils créé du stress dans vos relations ?",
+      "Trouvez-vous difficile de porter votre attention sur autre chose que vos acouphènes ?",
+      "Sentez-vous qu'il vous est impossible de contrôler vos acouphènes ?",
+      "À cause de vos acouphènes, vous sentez-vous souvent fatigué(e) ?",
+      "À cause de vos acouphènes, vous sentez-vous déprimé(e) ?",
+      "Vos acouphènes vous rendent-ils anxieux(se) ?",
+      "Sentez-vous que vous ne pouvez plus faire face à vos acouphènes ?",
+      "Vos acouphènes empirent-ils lorsque vous êtes stressé(e) ?",
+      "Vos acouphènes vous rendent-ils peu sûr(e) de vous ?",
+    ].map((text) => ({ text, type: "thi" as const, options: THI_OPTIONS, maxPoints: 4 })),
+  },
+
+  // ====== AUDIT ======
+  {
+    id: "audit",
+    acronym: "AUDIT",
+    name: "Alcohol Use Disorders Identification Test",
+    description: "Évaluation consommation d'alcool",
+    icon: "🛡️",
+    category: "Psychiatrie",
+    specialties: ["Addictologie", "Médecine générale", "Psychiatrie"],
+    pathology: "Troubles liés à l'usage d'alcool",
+    duration: "3 min",
+    isPro: true,
+    maxScore: 40,
+    scoring: [
+      { min: 0, max: 7, label: "Consommation à faible risque", severity: "normal", color: "#2db87d", action: "Prévention primaire" },
+      { min: 8, max: 15, label: "Consommation à risque", severity: "moderate", color: "#e8943a", action: "Intervention brève recommandée" },
+      { min: 16, max: 19, label: "Utilisation nocive", severity: "severe", color: "#e07030", action: "Intervention brève + suivi rapproché" },
+      { min: 20, max: 40, label: "Dépendance probable", severity: "critical", color: "#e05252", action: "Orientation vers un service d'addictologie" },
+    ],
+    questions: [
+      { text: "À quelle fréquence consommez-vous des boissons contenant de l'alcool ?", options: [{ value: 0, label: "Jamais" }, { value: 1, label: "Une fois par mois ou moins" }, { value: 2, label: "2 à 4 fois par mois" }, { value: 3, label: "2 à 3 fois par semaine" }, { value: 4, label: "4 fois ou plus par semaine" }], maxPoints: 4 },
+      { text: "Combien de verres standard buvez-vous au cours d'une journée ordinaire où vous buvez ?", options: [{ value: 0, label: "1 ou 2" }, { value: 1, label: "3 ou 4" }, { value: 2, label: "5 ou 6" }, { value: 3, label: "7 à 9" }, { value: 4, label: "10 ou plus" }], maxPoints: 4 },
+      { text: "À quelle fréquence vous arrive-t-il de boire 6 verres standard ou plus en une occasion ?", options: [{ value: 0, label: "Jamais" }, { value: 1, label: "Moins d'une fois par mois" }, { value: 2, label: "Une fois par mois" }, { value: 3, label: "Une fois par semaine" }, { value: 4, label: "Tous les jours ou presque" }], maxPoints: 4 },
+      { text: "Avez-vous constaté que vous n'étiez plus capable de vous arrêter de boire une fois commencé ?", options: [{ value: 0, label: "Jamais" }, { value: 1, label: "Moins d'une fois par mois" }, { value: 2, label: "Une fois par mois" }, { value: 3, label: "Une fois par semaine" }, { value: 4, label: "Tous les jours ou presque" }], maxPoints: 4 },
+      { text: "Le fait d'avoir bu vous a-t-il empêché de faire ce qui était normalement attendu de vous ?", options: [{ value: 0, label: "Jamais" }, { value: 1, label: "Moins d'une fois par mois" }, { value: 2, label: "Une fois par mois" }, { value: 3, label: "Une fois par semaine" }, { value: 4, label: "Tous les jours ou presque" }], maxPoints: 4 },
+      { text: "Avez-vous eu besoin d'un premier verre pour démarrer après avoir beaucoup bu la veille ?", options: [{ value: 0, label: "Jamais" }, { value: 1, label: "Moins d'une fois par mois" }, { value: 2, label: "Une fois par mois" }, { value: 3, label: "Une fois par semaine" }, { value: 4, label: "Tous les jours ou presque" }], maxPoints: 4 },
+      { text: "Avez-vous eu un sentiment de culpabilité ou de regret après avoir bu ?", options: [{ value: 0, label: "Jamais" }, { value: 1, label: "Moins d'une fois par mois" }, { value: 2, label: "Une fois par mois" }, { value: 3, label: "Une fois par semaine" }, { value: 4, label: "Tous les jours ou presque" }], maxPoints: 4 },
+      { text: "Avez-vous été incapable de vous rappeler ce qui s'était passé la nuit précédente parce que vous aviez bu ?", options: [{ value: 0, label: "Jamais" }, { value: 1, label: "Moins d'une fois par mois" }, { value: 2, label: "Une fois par mois" }, { value: 3, label: "Une fois par semaine" }, { value: 4, label: "Tous les jours ou presque" }], maxPoints: 4 },
+      { text: "Vous êtes-vous blessé(e) ou avez-vous blessé quelqu'un parce que vous aviez bu ?", options: [{ value: 0, label: "Non" }, { value: 2, label: "Oui, mais pas cette année" }, { value: 4, label: "Oui, cette année" }], maxPoints: 4 },
+      { text: "Un proche s'est-il inquiété de votre consommation d'alcool ou a-t-il suggéré de la réduire ?", options: [{ value: 0, label: "Non" }, { value: 2, label: "Oui, mais pas cette année" }, { value: 4, label: "Oui, cette année" }], maxPoints: 4 },
+    ].map((q) => ({ ...q, type: "likert" as const })),
+  },
+
+  // ====== NIHSS ======
+  {
+    id: "nihss",
+    acronym: "NIHSS",
+    name: "NIH Stroke Scale",
+    description: "Évaluation de l'AVC",
+    icon: "🚑",
+    category: "Neurologie",
+    specialties: ["Neurologie", "Urgences"],
+    pathology: "AVC",
+    duration: "6 min",
+    isPro: true,
+    maxScore: 42,
+    scoring: [
+      { min: 0, max: 0, label: "Pas de déficit neurologique", severity: "normal", color: "#2db87d" },
+      { min: 1, max: 4, label: "Déficit mineur", severity: "mild", color: "#5cb85c", action: "Envisager thrombolyse si <4h30" },
+      { min: 5, max: 15, label: "Déficit modéré", severity: "moderate", color: "#e8943a", action: "Thrombolyse IV si <4h30, thrombectomie si occlusion proximale" },
+      { min: 16, max: 20, label: "Déficit sévère", severity: "severe", color: "#e07030", action: "Thrombectomie mécanique à discuter" },
+      { min: 21, max: 42, label: "Déficit très sévère", severity: "critical", color: "#e05252", action: "Pronostic réservé, soins intensifs neurovasculaires" },
+    ],
+    questions: [
+      { text: "1a. Niveau de conscience", options: [{ value: 0, label: "Vigilant" }, { value: 1, label: "Non vigilant, éveillable" }, { value: 2, label: "Stimulations répétées" }, { value: 3, label: "Coma" }], maxPoints: 3 },
+      { text: "1b. Orientation : mois en cours et âge", options: [{ value: 0, label: "2 réponses correctes" }, { value: 1, label: "1 réponse correcte" }, { value: 2, label: "Aucune correcte" }], maxPoints: 2 },
+      { text: "1c. Commandes : ouvrir/fermer yeux, serrer/ouvrir main", options: [{ value: 0, label: "2 exécutées" }, { value: 1, label: "1 exécutée" }, { value: 2, label: "Aucune" }], maxPoints: 2 },
+      { text: "2. Oculomotricité horizontale", options: [{ value: 0, label: "Normal" }, { value: 1, label: "Paralysie partielle" }, { value: 2, label: "Déviation forcée" }], maxPoints: 2 },
+      { text: "3. Champ visuel", options: [{ value: 0, label: "Normal" }, { value: 1, label: "Hémianopsie partielle" }, { value: 2, label: "Hémianopsie complète" }, { value: 3, label: "Cécité bilatérale" }], maxPoints: 3 },
+      { text: "4. Paralysie faciale", options: [{ value: 0, label: "Normal" }, { value: 1, label: "Mineure" }, { value: 2, label: "Partielle" }, { value: 3, label: "Complète" }], maxPoints: 3 },
+      { text: "5a. Motricité membre supérieur gauche (10 sec)", options: [{ value: 0, label: "Pas de chute" }, { value: 1, label: "Chute <10s" }, { value: 2, label: "Effort contre gravité" }, { value: 3, label: "Pas d'effort contre gravité" }, { value: 4, label: "Aucun mouvement" }], maxPoints: 4 },
+      { text: "5b. Motricité membre supérieur droit (10 sec)", options: [{ value: 0, label: "Pas de chute" }, { value: 1, label: "Chute <10s" }, { value: 2, label: "Effort contre gravité" }, { value: 3, label: "Pas d'effort contre gravité" }, { value: 4, label: "Aucun mouvement" }], maxPoints: 4 },
+      { text: "6a. Motricité membre inférieur gauche (5 sec)", options: [{ value: 0, label: "Pas de chute" }, { value: 1, label: "Chute <5s" }, { value: 2, label: "Effort contre gravité" }, { value: 3, label: "Pas d'effort contre gravité" }, { value: 4, label: "Aucun mouvement" }], maxPoints: 4 },
+      { text: "6b. Motricité membre inférieur droit (5 sec)", options: [{ value: 0, label: "Pas de chute" }, { value: 1, label: "Chute <5s" }, { value: 2, label: "Effort contre gravité" }, { value: 3, label: "Pas d'effort contre gravité" }, { value: 4, label: "Aucun mouvement" }], maxPoints: 4 },
+      { text: "7. Ataxie des membres", options: [{ value: 0, label: "Absente" }, { value: 1, label: "1 membre" }, { value: 2, label: "2 membres ou plus" }], maxPoints: 2 },
+      { text: "8. Sensibilité", options: [{ value: 0, label: "Normale" }, { value: 1, label: "Hypoesthésie légère" }, { value: 2, label: "Hypoesthésie sévère" }], maxPoints: 2 },
+      { text: "9. Langage", options: [{ value: 0, label: "Pas d'aphasie" }, { value: 1, label: "Aphasie légère" }, { value: 2, label: "Aphasie sévère" }, { value: 3, label: "Mutisme / aphasie globale" }], maxPoints: 3 },
+      { text: "10. Dysarthrie", options: [{ value: 0, label: "Normal" }, { value: 1, label: "Légère" }, { value: 2, label: "Sévère / anarthrie" }], maxPoints: 2 },
+      { text: "11. Extinction et négligence", options: [{ value: 0, label: "Pas d'anomalie" }, { value: 1, label: "1 modalité" }, { value: 2, label: "Sévère / plurimodale" }], maxPoints: 2 },
+    ].map((q) => ({ ...q, type: "likert" as const })),
+  },
+
+  // ====== GDS-15 ======
+  {
+    id: "gds15",
+    acronym: "GDS-15",
+    name: "Geriatric Depression Scale (15 items)",
+    description: "Dépression du sujet âgé",
+    icon: "👴",
+    category: "Gériatrie",
+    specialties: ["Gériatrie", "Médecine générale"],
+    pathology: "Dépression gériatrique",
+    duration: "5 min",
+    isPro: true,
+    maxScore: 15,
+    scoring: [
+      { min: 0, max: 5, label: "Normal", severity: "normal", color: "#2db87d", action: "Pas de dépression significative" },
+      { min: 6, max: 10, label: "Dépression légère à modérée", severity: "moderate", color: "#e8943a", action: "Évaluation approfondie, envisager prise en charge" },
+      { min: 11, max: 15, label: "Dépression sévère", severity: "critical", color: "#e05252", action: "Prise en charge spécialisée recommandée" },
+    ],
+    questions: [
+      { text: "Êtes-vous globalement satisfait(e) de votre vie ?", type: "yesno-inverted" as const, options: YES_NO_INVERTED, maxPoints: 1, note: "Réponse 'Non' = 1 point" },
+      { text: "Avez-vous abandonné beaucoup de vos activités et intérêts ?", type: "yesno" as const, options: YES_NO, maxPoints: 1 },
+      { text: "Sentez-vous que votre vie est vide ?", type: "yesno" as const, options: YES_NO, maxPoints: 1 },
+      { text: "Vous ennuyez-vous souvent ?", type: "yesno" as const, options: YES_NO, maxPoints: 1 },
+      { text: "Êtes-vous de bonne humeur la plupart du temps ?", type: "yesno-inverted" as const, options: YES_NO_INVERTED, maxPoints: 1, note: "Réponse 'Non' = 1 point" },
+      { text: "Avez-vous peur qu'il vous arrive quelque chose de mal ?", type: "yesno" as const, options: YES_NO, maxPoints: 1 },
+      { text: "Vous sentez-vous heureux(se) la plupart du temps ?", type: "yesno-inverted" as const, options: YES_NO_INVERTED, maxPoints: 1, note: "Réponse 'Non' = 1 point" },
+      { text: "Vous sentez-vous souvent impuissant(e) ?", type: "yesno" as const, options: YES_NO, maxPoints: 1 },
+      { text: "Préférez-vous rester chez vous plutôt que de sortir ?", type: "yesno" as const, options: YES_NO, maxPoints: 1 },
+      { text: "Pensez-vous avoir plus de problèmes de mémoire que la plupart des gens ?", type: "yesno" as const, options: YES_NO, maxPoints: 1 },
+      { text: "Pensez-vous qu'il est merveilleux de vivre à notre époque ?", type: "yesno-inverted" as const, options: YES_NO_INVERTED, maxPoints: 1, note: "Réponse 'Non' = 1 point" },
+      { text: "Vous sentez-vous actuellement plutôt inutile ?", type: "yesno" as const, options: YES_NO, maxPoints: 1 },
+      { text: "Vous sentez-vous plein(e) d'énergie ?", type: "yesno-inverted" as const, options: YES_NO_INVERTED, maxPoints: 1, note: "Réponse 'Non' = 1 point" },
+      { text: "Sentez-vous que votre situation est désespérée ?", type: "yesno" as const, options: YES_NO, maxPoints: 1 },
+      { text: "Pensez-vous que la plupart des gens vivent mieux que vous ?", type: "yesno" as const, options: YES_NO, maxPoints: 1 },
+    ],
+  },
+
+  // ====== IPSS ======
+  {
+    id: "ipss",
+    acronym: "IPSS",
+    name: "International Prostate Symptom Score",
+    description: "Symptômes prostatiques",
+    icon: "🔬",
+    category: "Urologie",
+    specialties: ["Urologie", "Médecine générale"],
+    pathology: "Hypertrophie bénigne de prostate",
+    duration: "3 min",
+    isPro: true,
+    maxScore: 35,
+    instruction: "Au cours du dernier mois",
+    scoring: [
+      { min: 0, max: 7, label: "Symptômes légers", severity: "normal", color: "#2db87d", action: "Surveillance simple" },
+      { min: 8, max: 19, label: "Symptômes modérés", severity: "moderate", color: "#e8943a", action: "Traitement médicamenteux à envisager" },
+      { min: 20, max: 35, label: "Symptômes sévères", severity: "critical", color: "#e05252", action: "Traitement médicamenteux ou chirurgical" },
+    ],
+    questions: [
+      "Sensation de ne pas vider complètement votre vessie après avoir uriné",
+      "Besoin d'uriner à nouveau moins de 2 heures après avoir fini",
+      "Jet urinaire qui s'arrêtait et reprenait plusieurs fois",
+      "Difficultés à retenir vos urines",
+      "Jet urinaire faible",
+      "Devoir forcer ou pousser pour commencer à uriner",
+      "Nombre de levers la nuit pour uriner",
+    ].map((text, i) => ({
+      text: `${text}`,
+      type: "likert" as const,
+      options: i === 6
+        ? [{ value: 0, label: "Aucune fois" }, { value: 1, label: "1 fois" }, { value: 2, label: "2 fois" }, { value: 3, label: "3 fois" }, { value: 4, label: "4 fois" }, { value: 5, label: "5 fois ou plus" }]
+        : LIKERT_0_5,
+      maxPoints: 5,
+    })),
+  },
+
+  // ====== Fagerström ======
+  {
+    id: "fagerstrom",
+    acronym: "Fagerström",
+    name: "Test de Fagerström",
+    description: "Dépendance nicotinique",
+    icon: "🚬",
+    category: "Addictologie",
+    specialties: ["Addictologie", "Pneumologie", "Médecine générale"],
+    pathology: "Dépendance tabagique",
+    duration: "2 min",
+    isPro: true,
+    maxScore: 10,
+    scoring: [
+      { min: 0, max: 2, label: "Pas de dépendance", severity: "normal", color: "#2db87d", action: "Conseils d'arrêt, soutien motivationnel" },
+      { min: 3, max: 4, label: "Dépendance faible", severity: "mild", color: "#5cb85c", action: "Substituts nicotiniques à envisager" },
+      { min: 5, max: 6, label: "Dépendance moyenne", severity: "moderate", color: "#e8943a", action: "Substituts nicotiniques recommandés" },
+      { min: 7, max: 10, label: "Dépendance forte à très forte", severity: "critical", color: "#e05252", action: "Substituts + varénicline ou bupropion" },
+    ],
+    questions: [
+      { text: "Combien de temps après votre réveil fumez-vous votre première cigarette ?", type: "choice" as const, options: [{ value: 3, label: "Dans les 5 minutes" }, { value: 2, label: "6 à 30 minutes" }, { value: 1, label: "31 à 60 minutes" }, { value: 0, label: "Plus de 60 minutes" }], maxPoints: 3 },
+      { text: "Trouvez-vous difficile de ne pas fumer dans les endroits où c'est interdit ?", type: "yesno" as const, options: YES_NO, maxPoints: 1 },
+      { text: "Quelle cigarette trouvez-vous la plus indispensable ?", type: "choice" as const, options: [{ value: 1, label: "La première du matin" }, { value: 0, label: "Une autre" }], maxPoints: 1 },
+      { text: "Combien de cigarettes fumez-vous par jour ?", type: "choice" as const, options: [{ value: 0, label: "10 ou moins" }, { value: 1, label: "11 à 20" }, { value: 2, label: "21 à 30" }, { value: 3, label: "31 ou plus" }], maxPoints: 3 },
+      { text: "Fumez-vous de façon plus rapprochée dans les premières heures après le réveil ?", type: "yesno" as const, options: YES_NO, maxPoints: 1 },
+      { text: "Fumez-vous lorsque vous êtes si malade que vous devez rester au lit ?", type: "yesno" as const, options: YES_NO, maxPoints: 1 },
+    ],
+  },
+
+  // ====== STOP-BANG ======
+  {
+    id: "stopbang",
+    acronym: "STOP-BANG",
+    name: "STOP-BANG Questionnaire",
+    description: "Dépistage apnées du sommeil",
+    icon: "😴",
+    category: "Pneumologie",
+    specialties: ["Pneumologie", "Anesthésie", "Neurologie"],
+    pathology: "Syndrome d'apnées obstructives du sommeil",
+    duration: "2 min",
+    isPro: false,
+    maxScore: 8,
+    scoring: [
+      { min: 0, max: 2, label: "Risque faible de SAOS", severity: "normal", color: "#2db87d" },
+      { min: 3, max: 4, label: "Risque intermédiaire", severity: "moderate", color: "#e8943a", action: "Polygraphie ventilatoire à envisager" },
+      { min: 5, max: 8, label: "Risque élevé de SAOS", severity: "critical", color: "#e05252", action: "Polygraphie/polysomnographie recommandée" },
+    ],
+    questions: [
+      { text: "S — Snoring : Ronflez-vous fort ?", note: "Assez fort pour être entendu à travers une porte fermée" },
+      { text: "T — Tired : Vous sentez-vous souvent fatigué(e) ou somnolent(e) pendant la journée ?" },
+      { text: "O — Observed : A-t-on observé que vous arrêtiez de respirer pendant votre sommeil ?" },
+      { text: "P — Pressure : Êtes-vous traité(e) pour hypertension artérielle ?" },
+      { text: "B — BMI : Votre IMC est-il supérieur à 35 kg/m² ?", note: "Poids(kg) / taille(m)²" },
+      { text: "A — Age : Avez-vous plus de 50 ans ?" },
+      { text: "N — Neck : Votre tour de cou est-il supérieur à 40 cm ?", note: "Mesurer au niveau du cartilage thyroïde" },
+      { text: "G — Gender : Êtes-vous de sexe masculin ?" },
+    ].map((q) => ({ ...q, type: "yesno" as const, options: YES_NO, maxPoints: 1 })),
+  },
+
+  // ====== ISI ======
+  {
+    id: "isi",
+    acronym: "ISI",
+    name: "Insomnia Severity Index",
+    description: "Évaluation de l'insomnie",
+    icon: "🌙",
+    category: "Neurologie",
+    specialties: ["Neurologie", "Psychiatrie", "Médecine générale"],
+    pathology: "Insomnie",
+    duration: "2 min",
+    isPro: false,
+    maxScore: 28,
+    instruction: "Au cours des 2 dernières semaines",
+    scoring: [
+      { min: 0, max: 7, label: "Absence d'insomnie clinique", severity: "normal", color: "#2db87d" },
+      { min: 8, max: 14, label: "Insomnie infraclinique", severity: "mild", color: "#5cb85c", action: "Hygiène du sommeil, TCC-I à envisager" },
+      { min: 15, max: 21, label: "Insomnie clinique modérée", severity: "moderate", color: "#e8943a", action: "TCC-I recommandée" },
+      { min: 22, max: 28, label: "Insomnie clinique sévère", severity: "critical", color: "#e05252", action: "TCC-I + traitement médicamenteux" },
+    ],
+    questions: [
+      { text: "Difficultés à s'endormir", options: LIKERT_0_4 },
+      { text: "Difficultés à rester endormi(e) (réveils nocturnes)", options: LIKERT_0_4 },
+      { text: "Problème de réveil trop tôt le matin", options: LIKERT_0_4 },
+      { text: "Satisfaction par rapport à votre sommeil actuel", options: [{ value: 0, label: "Très satisfait" }, { value: 1, label: "Satisfait" }, { value: 2, label: "Neutre" }, { value: 3, label: "Insatisfait" }, { value: 4, label: "Très insatisfait" }] },
+      { text: "Interférence avec votre fonctionnement quotidien", options: [{ value: 0, label: "Pas du tout" }, { value: 1, label: "Un peu" }, { value: 2, label: "Moyennement" }, { value: 3, label: "Beaucoup" }, { value: 4, label: "Énormément" }] },
+      { text: "Détérioration de la qualité de vie apparente pour les autres", options: [{ value: 0, label: "Pas du tout" }, { value: 1, label: "Un peu" }, { value: 2, label: "Moyennement" }, { value: 3, label: "Beaucoup" }, { value: 4, label: "Énormément" }] },
+      { text: "Préoccupation par rapport à votre problème de sommeil", options: [{ value: 0, label: "Pas du tout" }, { value: 1, label: "Un peu" }, { value: 2, label: "Moyennement" }, { value: 3, label: "Beaucoup" }, { value: 4, label: "Énormément" }] },
+    ].map((q) => ({ ...q, type: "likert" as const, maxPoints: 4 })),
+  },
+
+  // ====== CAT ======
+  {
+    id: "cat",
+    acronym: "CAT",
+    name: "COPD Assessment Test",
+    description: "Évaluation de la BPCO",
+    icon: "🫁",
+    category: "Pneumologie",
+    specialties: ["Pneumologie"],
+    pathology: "BPCO",
+    duration: "3 min",
+    isPro: false,
+    maxScore: 40,
+    scoring: [
+      { min: 0, max: 10, label: "Impact faible", severity: "normal", color: "#2db87d", action: "Pas d'impact significatif" },
+      { min: 11, max: 20, label: "Impact modéré", severity: "moderate", color: "#e8943a", action: "Réévaluation du traitement" },
+      { min: 21, max: 30, label: "Impact élevé", severity: "severe", color: "#e07030", action: "Optimisation thérapeutique, réhabilitation respiratoire" },
+      { min: 31, max: 40, label: "Impact très élevé", severity: "critical", color: "#e05252", action: "Réévaluation complète, orientation pneumologique" },
+    ],
+    questions: [
+      { text: "Je ne tousse jamais ←→ Je tousse en permanence" },
+      { text: "Je n'ai pas de glaires ←→ Ma poitrine est encombrée de glaires" },
+      { text: "Aucune oppression thoracique ←→ Forte oppression thoracique" },
+      { text: "Pas essoufflé(e) en montant ←→ Très essoufflé(e) en montant" },
+      { text: "Pas limité(e) à la maison ←→ Très limité(e) à la maison" },
+      { text: "Aucune appréhension à sortir ←→ N'ose pas sortir" },
+      { text: "Je dors bien ←→ Sommeil très perturbé" },
+      { text: "J'ai beaucoup d'énergie ←→ Aucune énergie" },
+    ].map((q) => ({ ...q, type: "likert" as const, options: CAT_OPTIONS, maxPoints: 5, note: "0 = pas de problème, 5 = problème majeur" })),
+  },
+
+  // ====== DLQI ======
+  {
+    id: "dlqi",
+    acronym: "DLQI",
+    name: "Dermatology Life Quality Index",
+    description: "Qualité de vie en dermatologie",
+    icon: "🧴",
+    category: "Dermatologie",
+    specialties: ["Dermatologie"],
+    pathology: "Dermatoses chroniques",
+    duration: "3 min",
+    isPro: false,
+    maxScore: 30,
+    instruction: "Au cours des 7 derniers jours",
+    scoring: [
+      { min: 0, max: 1, label: "Aucun effet sur la qualité de vie", severity: "normal", color: "#2db87d" },
+      { min: 2, max: 5, label: "Effet léger", severity: "mild", color: "#5cb85c" },
+      { min: 6, max: 10, label: "Effet modéré", severity: "moderate", color: "#e8943a", action: "Traitement à optimiser" },
+      { min: 11, max: 20, label: "Effet important", severity: "severe", color: "#e07030", action: "Indication de traitement systémique ou biothérapie" },
+      { min: 21, max: 30, label: "Effet extrêmement important", severity: "critical", color: "#e05252", action: "Impact majeur, prise en charge multidisciplinaire" },
+    ],
+    questions: [
+      "Votre peau vous a-t-elle démangé(e), fait souffrir, ou a-t-elle été douloureuse ?",
+      "Vous êtes-vous senti(e) gêné(e) ou embarrassé(e) à cause de votre peau ?",
+      "Votre peau vous a-t-elle gêné(e) pour les courses, la maison ou le jardin ?",
+      "Votre peau a-t-elle influencé le choix de vos vêtements ?",
+      "Votre peau a-t-elle eu un effet sur vos activités sociales ou de loisir ?",
+      "Votre peau vous a-t-elle empêché(e) de faire du sport ?",
+      "Votre peau vous a-t-elle empêché(e) de travailler ou étudier ?",
+      "Votre peau a-t-elle créé des problèmes avec vos proches ?",
+      "Votre peau a-t-elle rendu votre vie sexuelle difficile ?",
+      "Le traitement de votre peau a-t-il été un problème ?",
+    ].map((text) => ({ text, type: "likert" as const, options: DLQI_OPTIONS, maxPoints: 3 })),
+  },
+
+  // ====== SCOFF ======
+  {
+    id: "scoff",
+    acronym: "SCOFF",
+    name: "SCOFF Questionnaire",
+    description: "Dépistage troubles alimentaires",
+    icon: "🍽️",
+    category: "Psychiatrie",
+    specialties: ["Psychiatrie", "Médecine générale", "Nutrition"],
+    pathology: "Troubles du comportement alimentaire",
+    duration: "1 min",
+    isPro: false,
+    maxScore: 5,
+    scoring: [
+      { min: 0, max: 1, label: "Dépistage négatif", severity: "normal", color: "#2db87d", action: "TCA peu probable" },
+      { min: 2, max: 5, label: "Dépistage positif", severity: "alert", color: "#e05252", action: "Score ≥2 : forte suspicion de TCA. Évaluation spécialisée nécessaire" },
+    ],
+    questions: [
+      { text: "S — Sick : Vous faites-vous vomir quand vous vous sentez excessivement plein(e) ?" },
+      { text: "C — Control : Vous inquiétez-vous d'avoir perdu le contrôle de ce que vous mangez ?" },
+      { text: "O — One stone : Avez-vous récemment perdu plus de 6 kg en moins de 3 mois ?" },
+      { text: "F — Fat : Pensez-vous être gros(se) alors que d'autres vous trouvent trop mince ?" },
+      { text: "F — Food : Diriez-vous que la nourriture domine votre vie ?" },
+    ].map((q) => ({ ...q, type: "yesno" as const, options: YES_NO, maxPoints: 1 })),
+  },
+
+  // ====== SNOT-22 ======
+  {
+    id: "snot22",
+    acronym: "SNOT-22",
+    name: "Sino-Nasal Outcome Test 22",
+    description: "Évaluation rhinosinusite chronique",
+    icon: "👃",
+    category: "ORL",
+    specialties: ["ORL", "Allergologie", "Pneumologie"],
+    pathology: "Rhinosinusite chronique, polypose",
+    duration: "5 min",
+    isPro: true,
+    maxScore: 110,
+    instruction: "Au cours des 2 dernières semaines",
+    scoring: [
+      { min: 0, max: 7, label: "Normal", severity: "normal", color: "#2db87d", action: "Pas de retentissement significatif" },
+      { min: 8, max: 20, label: "Retentissement léger", severity: "mild", color: "#5cb85c", action: "Traitement de 1ère intention (lavage nasal, corticoïdes locaux)" },
+      { min: 21, max: 50, label: "Retentissement modéré", severity: "moderate", color: "#e8943a", action: "Optimisation du traitement, bilan allergologique et scanner" },
+      { min: 51, max: 110, label: "Retentissement sévère", severity: "critical", color: "#e05252", action: "Discussion chirurgicale (FESS)" },
+    ],
+    questions: [
+      "Besoin de se moucher",
+      "Éternuements",
+      "Nez qui coule",
+      "Toux",
+      "Écoulement nasal postérieur (dans l'arrière-gorge)",
+      "Sécrétions nasales épaisses",
+      "Sensation d'oreille bouchée",
+      "Vertiges / étourdissements",
+      "Douleur / pression auriculaire",
+      "Douleur / pression faciale",
+      "Difficultés d'endormissement",
+      "Réveils nocturnes",
+      "Manque de sommeil réparateur",
+      "Fatigue au réveil",
+      "Fatigue diurne",
+      "Baisse de productivité",
+      "Diminution de la concentration",
+      "Frustration / agitation / irritabilité",
+      "Tristesse",
+      "Gêne / embarras",
+      "Altération du goût et/ou de l'odorat",
+      "Obstruction / congestion nasale",
+    ].map((text) => ({ text, type: "likert" as const, options: SNOT_OPTIONS, maxPoints: 5 })),
+  },
+
+  // ====== ACT ======
+  {
+    id: "act",
+    acronym: "ACT",
+    name: "Asthma Control Test",
+    description: "Contrôle de l'asthme",
+    icon: "🌬️",
+    category: "Pneumologie",
+    specialties: ["Pneumologie", "Allergologie", "Médecine générale"],
+    pathology: "Asthme (contrôle)",
+    duration: "2 min",
+    isPro: true,
+    maxScore: 25,
+    instruction: "Au cours des 4 dernières semaines. Score inversé : 5 = meilleur contrôle",
+    scoring: [
+      { min: 25, max: 25, label: "Asthme totalement contrôlé", severity: "normal", color: "#2db87d", action: "Aucune modification thérapeutique" },
+      { min: 20, max: 24, label: "Asthme bien contrôlé", severity: "normal", color: "#2db87d", action: "Maintenir le traitement" },
+      { min: 15, max: 19, label: "Asthme partiellement contrôlé", severity: "moderate", color: "#e8943a", action: "Vérifier observance, envisager step-up" },
+      { min: 5, max: 14, label: "Asthme non contrôlé", severity: "critical", color: "#e05252", action: "Réévaluation complète, step-up thérapeutique" },
+    ],
+    questions: [
+      { text: "Votre asthme vous a-t-il gêné(e) dans vos activités ?", options: [{ value: 1, label: "Tout le temps" }, { value: 2, label: "La plupart du temps" }, { value: 3, label: "Quelquefois" }, { value: 4, label: "Rarement" }, { value: 5, label: "Jamais" }] },
+      { text: "Avez-vous été essoufflé(e) ?", options: [{ value: 1, label: "Plus d'une fois/jour" }, { value: 2, label: "Une fois/jour" }, { value: 3, label: "3 à 6 fois/semaine" }, { value: 4, label: "1 à 2 fois/semaine" }, { value: 5, label: "Jamais" }] },
+      { text: "Les symptômes vous ont-ils réveillé(e) la nuit ?", options: [{ value: 1, label: "4 nuits+/semaine" }, { value: 2, label: "2 à 3 nuits/semaine" }, { value: 3, label: "1 nuit/semaine" }, { value: 4, label: "1 ou 2 fois en tout" }, { value: 5, label: "Jamais" }] },
+      { text: "Avez-vous utilisé votre inhalateur de secours ?", options: [{ value: 1, label: "3 fois+/jour" }, { value: 2, label: "1 à 2 fois/jour" }, { value: 3, label: "2 à 3 fois/semaine" }, { value: 4, label: "1 fois/semaine ou moins" }, { value: 5, label: "Jamais" }] },
+      { text: "Comment évalueriez-vous votre contrôle de l'asthme ?", options: [{ value: 1, label: "Pas contrôlé du tout" }, { value: 2, label: "Très peu contrôlé" }, { value: 3, label: "Un peu contrôlé" }, { value: 4, label: "Bien contrôlé" }, { value: 5, label: "Totalement contrôlé" }] },
+    ].map((q) => ({ ...q, type: "likert" as const, maxPoints: 5 })),
+  },
+
+  // ====== ACQ-5 ======
+  {
+    id: "acq5",
+    acronym: "ACQ-5",
+    name: "Asthma Control Questionnaire (5 items)",
+    description: "Contrôle de l'asthme (recherche)",
+    icon: "🌬️",
+    category: "Pneumologie",
+    specialties: ["Pneumologie", "Allergologie"],
+    pathology: "Asthme (contrôle)",
+    duration: "2 min",
+    isPro: true,
+    maxScore: 6, // average score, not sum
+    scoreMethod: "average",
+    instruction: "Au cours de la dernière semaine. Score = moyenne des 5 items (0-6)",
+    scoring: [
+      { min: 0, max: 0.75, label: "Asthme bien contrôlé", severity: "normal", color: "#2db87d", action: "Score moyen ≤0.75" },
+      { min: 0.76, max: 1.5, label: "Zone grise (indéterminé)", severity: "mild", color: "#5cb85c", action: "Réévaluer à court terme" },
+      { min: 1.51, max: 6, label: "Asthme non contrôlé", severity: "critical", color: "#e05252", action: "Score moyen ≥1.5. Optimiser le traitement" },
+    ],
+    questions: [
+      { text: "Réveils nocturnes à cause de l'asthme" },
+      { text: "Symptômes d'asthme au réveil le matin" },
+      { text: "Limitation dans vos activités à cause de l'asthme" },
+      { text: "Essoufflement à cause de l'asthme" },
+      { text: "Sifflements (wheezing)" },
+    ].map((q) => ({
+      ...q,
+      type: "likert" as const,
+      options: Array.from({ length: 7 }, (_, i) => ({ value: i, label: String(i) })),
+      maxPoints: 6,
+    })),
+  },
+
+  // ====== HADS ======
+  {
+    id: "hads",
+    acronym: "HADS",
+    name: "Hospital Anxiety & Depression Scale",
+    description: "Anxiété et dépression hospitalière",
+    icon: "🏥",
+    category: "Psychiatrie",
+    specialties: ["Psychiatrie", "Médecine générale"],
+    pathology: "Anxiété / Dépression",
+    duration: "5 min",
+    isPro: true,
+    maxScore: 42,
+    scoring: [
+      { min: 0, max: 7, label: "Normal", severity: "normal", color: "#2db87d" },
+      { min: 8, max: 10, label: "Cas douteux", severity: "mild", color: "#5cb85c" },
+      { min: 11, max: 42, label: "Cas certain", severity: "moderate", color: "#e8943a" },
+    ],
+    questions: [],
+  },
+];
+
+export const SPECIALTIES = [
+  { id: "all", label: "Tous", icon: "📋" },
+  { id: "psy", label: "Psychiatrie", icon: "💭" },
+  { id: "neuro", label: "Neurologie", icon: "🧠" },
+  { id: "geriatrie", label: "Gériatrie", icon: "👴" },
+  { id: "urgences", label: "Urgences", icon: "🚑" },
+  { id: "pneumo", label: "Pneumologie", icon: "🫁" },
+  { id: "douleur", label: "Douleur", icon: "⚡" },
+  { id: "addictologie", label: "Addictologie", icon: "🛡️" },
+  { id: "uro", label: "Urologie", icon: "🔬" },
+  { id: "orl", label: "ORL", icon: "👂" },
+  { id: "dermato", label: "Dermatologie", icon: "🧴" },
+  { id: "allergo", label: "Allergologie", icon: "🌬️" },
+  { id: "nutrition", label: "Nutrition", icon: "🍽️" },
+  { id: "general", label: "Médecine générale", icon: "🩺" },
+];
+
+export function getScoring(test: Questionnaire, score: number) {
+  return test.scoring.find((b) => score >= b.min && score <= b.max) ?? test.scoring[test.scoring.length - 1];
+}
+
+export function calculateScore(test: Questionnaire, answers: Record<number, number>): number {
+  const sum = Object.values(answers).reduce((a, b) => a + b, 0);
+  if (test.scoreMethod === "average") {
+    const count = Object.keys(answers).length;
+    return count > 0 ? Math.round((sum / count) * 100) / 100 : 0;
+  }
+  return sum;
+}
