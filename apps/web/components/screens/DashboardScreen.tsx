@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { QUESTIONNAIRES } from "@/lib/questionnaires";
-import { getActiveSessions, getCompletedSessions, onSessionUpdate, getSessionByCode } from "@/lib/sessions";
+import { getAllSessions, onSessionUpdate } from "@/lib/sessions";
 import { CALCULATORS } from "@/lib/calculators";
 import type { Session } from "@/lib/sessions";
 import type { Questionnaire, Doctor, AppTab } from "@/lib/types";
@@ -18,8 +18,8 @@ function ActiveSessionsBubble() {
   // Load and refresh active sessions
   useEffect(() => {
     const refresh = () => {
-      const active = [...getActiveSessions()].sort((a, b) => b.createdAt - a.createdAt);
-      setSessions(active);
+      const all = [...getAllSessions()].sort((a, b) => b.createdAt - a.createdAt);
+      setSessions(all);
     };
     refresh();
     // Listen for BroadcastChannel updates
@@ -54,10 +54,12 @@ function ActiveSessionsBubble() {
         </div>
         <div className="flex-1 text-left">
           <div className="text-[14px] font-bold text-ds-text">
-            {sessions.length} session{sessions.length > 1 ? "s" : ""} patient{sessions.length > 1 ? "s" : ""} en cours
+            {sessions.length} session{sessions.length > 1 ? "s" : ""} patient{sessions.length > 1 ? "s" : ""
+            } · 30 dernières min
           </div>
           <div className="text-[11px] text-ds-text-muted font-medium">
-            {sessions.filter(s => s.status === "progress").length} en train de répondre
+            {sessions.filter(s => s.status === "completed").length} terminé{sessions.filter(s => s.status === "completed").length > 1 ? "s" : ""} ·{" "}
+            {sessions.filter(s => s.status === "progress" || s.status === "waiting" || s.status === "connected").length} en cours
           </div>
         </div>
         <span className={`text-ds-text-muted text-sm transition-transform duration-200 ${expanded ? "rotate-180" : ""}`}>
