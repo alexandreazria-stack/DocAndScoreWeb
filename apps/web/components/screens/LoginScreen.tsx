@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { Logo } from "@/components/ui/Logo";
 import { PasswordInput } from "@/components/ui/Input";
+import { supabase } from "@/lib/supabase";
 
 export function LoginScreen({ onLogin }: { onLogin: () => void }) {
   const [mode, setMode] = useState<"signin" | "signup">("signin");
@@ -16,7 +17,7 @@ export function LoginScreen({ onLogin }: { onLogin: () => void }) {
   const passwordLongEnough = password.length >= 8;
   const canSubmit = email.includes("@") && passwordLongEnough && passwordsMatch;
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setError("");
     if (!canSubmit) return;
     if (isSignUp && !passwordsMatch) {
@@ -24,10 +25,28 @@ export function LoginScreen({ onLogin }: { onLogin: () => void }) {
       return;
     }
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      if (isSignUp) {
+        const { error: signUpError } = await supabase.auth.signUp({ email, password });
+        if (signUpError) { setError(signUpError.message); setLoading(false); return; }
+      } else {
+        const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+        if (signInError) { setError(signInError.message); setLoading(false); return; }
+      }
       onLogin();
-    }, 800);
+    } catch {
+      setError("Erreur de connexion");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogle = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: `${window.location.origin}` },
+    });
+    if (error) setError(error.message);
   };
 
   return (
@@ -187,7 +206,7 @@ export function LoginScreen({ onLogin }: { onLogin: () => void }) {
 
           {/* Google */}
           <button
-            onClick={onLogin}
+            onClick={handleGoogle}
             className="w-full py-3.5 px-5 rounded-[14px] border border-ds-border/70 bg-white/80 text-sm font-semibold text-ds-text flex items-center justify-center gap-3 hover:bg-white hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
           >
             <svg width="18" height="18" viewBox="0 0 18 18">

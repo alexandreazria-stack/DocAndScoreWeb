@@ -1,5 +1,6 @@
 "use client";
 import { Badge } from "@/components/ui/Badge";
+import { supabase } from "@/lib/supabase";
 import type { Doctor } from "@/lib/types";
 
 export function SettingsScreen({ doctor }: { doctor: Doctor }) {
@@ -47,6 +48,13 @@ export function SettingsScreen({ doctor }: { doctor: Doctor }) {
           </div>
         </div>
       ))}
+
+      <button
+        onClick={() => supabase.auth.signOut()}
+        className="w-full mt-6 py-3.5 rounded-[14px] border border-ds-error/20 text-ds-error text-[14px] font-bold hover:bg-ds-error/5 active:scale-[0.98] transition-all"
+      >
+        Se déconnecter
+      </button>
 
       <div className="text-center mt-8 animate-fade-in">
         <p className="text-[11px] text-ds-text-muted/60 font-medium">Doc&Score v1.0.0</p>

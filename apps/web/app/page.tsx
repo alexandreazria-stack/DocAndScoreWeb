@@ -10,7 +10,8 @@ import { QRScreen } from "@/components/screens/QRScreen";
 import { PatientScreen } from "@/components/screens/PatientScreen";
 import { SettingsScreen } from "@/components/screens/SettingsScreen";
 import { BottomNav } from "@/components/ui/BottomNav";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabase";
 import type { Questionnaire } from "@/lib/types";
 
 export default function Home() {
@@ -19,6 +20,30 @@ export default function Home() {
     setScreen, setDoctor, setActiveTab, setSelectedTest, setResult, goHome,
   } = useAppStore();
   const [showPatientDemo, setShowPatientDemo] = useState(false);
+  const [authReady, setAuthReady] = useState(false);
+
+  // Listen for Supabase auth state
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        // User is logged in — skip to onboarding or app
+        if (!doctor) setScreen("onboarding");
+        else setScreen("app");
+      }
+      setAuthReady(true);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session && screen === "login") {
+        setScreen("onboarding");
+      }
+      if (!session) {
+        setScreen("login");
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   const handleLogin = () => setScreen("onboarding");
   const handleOnboarding = (profile: { title: string; lastName: string; firstName: string; specialty: string }) => {
@@ -37,6 +62,12 @@ export default function Home() {
   const shell = (children: React.ReactNode) => (
     <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, overflow: "auto", background: "#EAEFF3", zIndex: 9999 }} className="font-display text-ds-text">
       {children}
+    </div>
+  );
+
+  if (!authReady) return shell(
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%" }}>
+      <div className="w-10 h-10 border-3 border-ds-sky/20 border-t-ds-sky rounded-full animate-spin" />
     </div>
   );
 
