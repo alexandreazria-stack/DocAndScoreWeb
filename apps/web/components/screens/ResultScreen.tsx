@@ -42,7 +42,7 @@ export function ResultScreen({
   );
 
   return (
-    <div className="pb-20 px-4 bg-ambient grain min-h-dvh">
+    <div className="pb-20 px-4 bg-ambient grain min-h-dvh max-w-2xl mx-auto sm:px-6">
       {/* Header */}
       <div className="flex items-center gap-3 py-4 animate-fade-in">
         <button
@@ -84,7 +84,7 @@ export function ResultScreen({
           <h3 className="text-[15px] font-bold flex-1">Identité du patient</h3>
           <Badge variant="sky">LOCAL UNIQUEMENT</Badge>
         </div>
-        <div className="flex flex-col gap-2.5">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
           <InputField value={patientName} onChange={setPatientName} placeholder="Nom" />
           <InputField value={patientFirstName} onChange={setPatientFirstName} placeholder="Prénom" />
           <InputField value={patientDob} onChange={setPatientDob} placeholder="Date de naissance (JJ/MM/AAAA)" />

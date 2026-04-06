@@ -37,7 +37,7 @@ export function LoginScreen({ onLogin }: { onLogin: () => void }) {
       <div className="absolute bottom-[-15%] right-[-10%] w-[400px] h-[400px] rounded-full bg-ds-pro/[0.05] blur-[80px] pointer-events-none" />
       <div className="absolute top-[30%] right-[5%] w-[200px] h-[200px] rounded-full bg-ds-success/[0.04] blur-[60px] pointer-events-none" />
 
-      <div className="relative z-10 w-full max-w-[400px] px-6">
+      <div className="relative z-10 w-full max-w-[440px] px-6 sm:px-0">
         {/* Header */}
         <div className="text-center mb-8 animate-fade-in-up">
           <div className="mb-4 text-6xl opacity-15 animate-float">🩺</div>

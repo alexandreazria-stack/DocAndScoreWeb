@@ -119,7 +119,7 @@ export function QRScreen({
   const s = configs[status];
 
   return (
-    <div className="pb-20 px-4 bg-ambient grain min-h-dvh">
+    <div className="pb-20 px-4 bg-ambient grain min-h-dvh max-w-2xl mx-auto sm:px-6">
       <div className="flex items-center gap-3 py-4 animate-fade-in">
         <button onClick={onBack} className="w-9 h-9 rounded-full bg-white/60 backdrop-blur flex items-center justify-center text-lg text-ds-text-secondary hover:bg-white transition-colors">←</button>
         <span className="font-mono font-bold text-ds-sky text-[15px]">{test.acronym}</span>

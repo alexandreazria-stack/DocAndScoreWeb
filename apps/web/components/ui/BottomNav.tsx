@@ -9,7 +9,7 @@ const items: { id: AppTab; icon: string; label: string }[] = [
 
 export function BottomNav({ active, onNavigate }: { active: AppTab; onNavigate: (tab: AppTab) => void }) {
   return (
-    <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] z-50">
+    <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-2xl z-50">
       <div className="mx-3 mb-3 glass-strong rounded-2xl flex justify-around py-2.5 pb-3 shadow-[0_-4px_20px_rgba(21,34,51,0.06)]">
         {items.map((item) => (
           <button

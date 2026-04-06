@@ -38,7 +38,7 @@ export function TestScreen({
     <div className="min-h-dvh flex flex-col bg-ds-bg grain">
       {/* Sticky header */}
       <div className="sticky top-0 z-10 glass-strong border-b border-white/40">
-        <div className="flex items-center justify-between px-4 py-3.5">
+        <div className="flex items-center justify-between px-4 py-3.5 max-w-3xl mx-auto sm:px-6">
           <div className="flex items-center gap-3">
             <button
               onClick={onBack}
@@ -58,11 +58,11 @@ export function TestScreen({
             </div>
           </div>
         </div>
-        <ProgressBar value={isSlider ? 1 : answered} max={total} />
+        <div className="max-w-3xl mx-auto sm:px-6"><ProgressBar value={isSlider ? 1 : answered} max={total} /></div>
       </div>
 
       {/* Content */}
-      <div className="flex-1 px-4 pt-5 pb-28 bg-ambient">
+      <div className="flex-1 px-4 pt-5 pb-28 bg-ambient max-w-3xl mx-auto w-full sm:px-6">
         <div className="animate-fade-in-up">
           <h2 className="text-[18px] font-extrabold mb-1 tracking-tight">{test.name}</h2>
           <p className="text-ds-text-muted text-[13px] mb-5">{test.description} · {test.duration}</p>
@@ -100,7 +100,7 @@ export function TestScreen({
             </div>
           </div>
         ) : (
-          <div className="flex flex-col gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {test.questions.map((q, idx) => {
               const isAnswered = answers[idx] !== undefined;
               return (
@@ -176,7 +176,7 @@ export function TestScreen({
       </div>
 
       {/* Bottom CTA */}
-      <div className="sticky bottom-0 px-4 pt-4 pb-6 bg-gradient-to-t from-ds-bg via-ds-bg/95 to-transparent">
+      <div className="sticky bottom-0 px-4 pt-4 pb-6 bg-gradient-to-t from-ds-bg via-ds-bg/95 to-transparent max-w-3xl mx-auto w-full sm:px-6">
         <button
           onClick={handleSubmit}
           disabled={!isSlider && !allAnswered}

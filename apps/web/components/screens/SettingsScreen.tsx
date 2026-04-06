@@ -13,7 +13,7 @@ export function SettingsScreen({ doctor }: { doctor: Doctor }) {
   ];
 
   return (
-    <div className="pb-24 px-4 pt-5 bg-ambient grain min-h-dvh">
+    <div className="pb-24 px-4 pt-5 bg-ambient grain min-h-dvh max-w-2xl mx-auto sm:px-6">
       <h1 className="text-[24px] font-extrabold mb-6 tracking-tight animate-fade-in-up">Réglages</h1>
 
       {/* Profile card */}

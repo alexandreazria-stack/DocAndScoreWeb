@@ -33,7 +33,7 @@ export function SearchScreen({
   });
 
   return (
-    <div className="pb-20 px-4">
+    <div className="pb-20 px-4 max-w-3xl mx-auto sm:px-6 lg:px-8">
       {/* Sticky header */}
       <div className="sticky top-0 bg-ds-bg z-10 pt-4 pb-3">
         <div className="flex items-center gap-3 mb-3">
@@ -61,7 +61,7 @@ export function SearchScreen({
         {filtered.length} résultat{filtered.length > 1 ? "s" : ""}
       </p>
 
-      <div className="flex flex-col gap-2.5">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
         {filtered.map((test) => (
           <div key={test.id} className="bg-white rounded-2xl border border-ds-border-light p-4 hover:-translate-y-0.5 hover:shadow-md transition-all">
             <div className="flex items-start gap-3">

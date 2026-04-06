@@ -123,7 +123,7 @@ export function DashboardScreen({
   const proTests = QUESTIONNAIRES.filter((q) => q.isPro);
 
   return (
-    <div className="pb-24 px-4 pt-5 bg-ambient grain">
+    <div className="pb-24 px-4 pt-5 bg-ambient grain max-w-3xl mx-auto sm:px-6 lg:px-8">
       {/* Header */}
       <div className="flex justify-between items-center mb-2 animate-fade-in-up">
         <Logo size="md" />
@@ -133,7 +133,7 @@ export function DashboardScreen({
       </div>
 
       <div className="animate-fade-in-up stagger-1">
-        <h1 className="text-[24px] font-extrabold mt-5 mb-1 tracking-tight leading-tight">
+        <h1 className="text-[24px] sm:text-[30px] font-extrabold mt-5 mb-1 tracking-tight leading-tight">
           Bonjour {doctor.title} {doctor.lastName}{" "}
           <span className="inline-block animate-float">👋</span>
         </h1>
@@ -186,7 +186,7 @@ export function DashboardScreen({
         </div>
       </div>
 
-      <div className="flex flex-col gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {freeTests.map((test, i) => (
           <div
             key={test.id}
@@ -245,7 +245,7 @@ export function DashboardScreen({
         </div>
       </div>
 
-      <div className="flex flex-col gap-2.5">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
         {proTests.map((test) => (
           <div
             key={test.id}
