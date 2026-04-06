@@ -1,8 +1,9 @@
 FROM node:22-slim
 WORKDIR /app
-COPY package*.json ./
+COPY apps/api/package.json apps/api/package-lock.json ./
 RUN npm ci
-COPY . .
+COPY apps/api/src ./src
+COPY apps/api/tsconfig.json ./
 RUN npm run build
 EXPOSE 3001
 CMD ["node", "dist/server.js"]
