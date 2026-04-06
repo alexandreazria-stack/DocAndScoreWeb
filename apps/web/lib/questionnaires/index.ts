@@ -1,4 +1,5 @@
 import type { Questionnaire, AnswerOption } from "../types";
+export { CALCULATORS } from "../calculators";
 
 // Reusable option sets
 const LIKERT_0_3: AnswerOption[] = [
@@ -869,6 +870,7 @@ export const SPECIALTIES = [
   { id: "allergo", label: "Allergologie", icon: "🌬️" },
   { id: "nutrition", label: "Nutrition", icon: "🍽️" },
   { id: "general", label: "Médecine générale", icon: "🩺" },
+  { id: "cardio", label: "Cardiologie", icon: "❤️" },
 ];
 
 export function getScoring(test: Questionnaire, score: number) {

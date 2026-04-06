@@ -9,10 +9,12 @@ import { ResultScreen } from "@/components/screens/ResultScreen";
 import { QRScreen } from "@/components/screens/QRScreen";
 import { PatientScreen } from "@/components/screens/PatientScreen";
 import { SettingsScreen } from "@/components/screens/SettingsScreen";
+import { CalculatorScreen } from "@/components/screens/CalculatorScreen";
 import { BottomNav } from "@/components/ui/BottomNav";
 import { useState, useEffect } from "react";
 import { supabase, loadProfile, saveProfile } from "@/lib/supabase";
 import type { Questionnaire } from "@/lib/types";
+import type { Calculator } from "@/lib/calculators/types";
 
 export default function Home() {
   const {
@@ -21,6 +23,7 @@ export default function Home() {
   } = useAppStore();
   const [showPatientDemo, setShowPatientDemo] = useState(false);
   const [authReady, setAuthReady] = useState(false);
+  const [selectedCalculator, setSelectedCalculator] = useState<Calculator | null>(null);
 
   // Listen for Supabase auth state
   useEffect(() => {
@@ -69,6 +72,10 @@ export default function Home() {
     setSelectedTest(test);
     setScreen("qr");
   };
+  const handleSelectCalculator = (calc: Calculator) => {
+    setSelectedCalculator(calc);
+    setScreen("calculator");
+  };
 
   const shell = (children: React.ReactNode) => (
     <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, overflow: "auto", background: "#EAEFF3", zIndex: 9999 }} className="font-display text-ds-text">
@@ -86,6 +93,14 @@ export default function Home() {
   if (screen === "onboarding") return shell(<OnboardingScreen onComplete={handleOnboarding} />);
 
   if (!doctor) return shell(<LoginScreen onLogin={handleLogin} />);
+
+  if (screen === "calculator" && selectedCalculator) return shell(
+    <CalculatorScreen
+      calculator={selectedCalculator}
+      doctor={doctor}
+      onBack={goHome}
+    />
+  );
 
   if (showPatientDemo && selectedTest) {
     return shell(
@@ -105,6 +120,7 @@ export default function Home() {
           onNavigate={setActiveTab}
           onSelectTest={handleSelectTest}
           onSelectQR={handleSelectQR}
+          onSelectCalculator={handleSelectCalculator}
         />
       )}
       {screen === "app" && activeTab === "search" && (
@@ -112,6 +128,7 @@ export default function Home() {
           onBack={() => setActiveTab("dashboard")}
           onSelectTest={handleSelectTest}
           onSelectQR={handleSelectQR}
+          onSelectCalculator={handleSelectCalculator}
         />
       )}
       {screen === "app" && activeTab === "settings" && (

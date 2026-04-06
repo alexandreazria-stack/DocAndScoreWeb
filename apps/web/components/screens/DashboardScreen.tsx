@@ -6,8 +6,10 @@ import { Button } from "@/components/ui/Button";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { QUESTIONNAIRES } from "@/lib/questionnaires";
 import { getActiveSessions, getCompletedSessions, onSessionUpdate, getSessionByCode } from "@/lib/sessions";
+import { CALCULATORS } from "@/lib/calculators";
 import type { Session } from "@/lib/sessions";
 import type { Questionnaire, Doctor, AppTab } from "@/lib/types";
+import type { Calculator } from "@/lib/calculators/types";
 
 function ActiveSessionsBubble() {
   const [sessions, setSessions] = useState<Session[]>([]);
@@ -113,11 +115,13 @@ export function DashboardScreen({
   onNavigate,
   onSelectTest,
   onSelectQR,
+  onSelectCalculator,
 }: {
   doctor: Doctor;
   onNavigate: (tab: AppTab) => void;
   onSelectTest: (test: Questionnaire) => void;
   onSelectQR: (test: Questionnaire) => void;
+  onSelectCalculator: (calc: Calculator) => void;
 }) {
   const freeTests = QUESTIONNAIRES.filter((q) => q.questions.length > 0);
   const proTests: Questionnaire[] = [];
@@ -144,6 +148,27 @@ export function DashboardScreen({
 
       {/* Active patient sessions */}
       <ActiveSessionsBubble />
+
+      {/* Calculators */}
+      {CALCULATORS.map((calc) => (
+        <div
+          key={calc.id}
+          onClick={() => onSelectCalculator(calc)}
+          className="animate-fade-in-up stagger-2 ds-card ds-card-hover flex items-center gap-3.5 p-4 mb-3 cursor-pointer"
+        >
+          <div className="w-11 h-11 rounded-[12px] bg-red-50 flex items-center justify-center text-xl shrink-0">
+            {calc.icon}
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2">
+              <span className="font-mono font-bold text-[13px] text-red-500">{calc.acronym}</span>
+              <span className="text-[9px] font-bold bg-red-50 text-red-400 px-1.5 py-0.5 rounded-full uppercase tracking-wide">Calculateur</span>
+            </div>
+            <p className="text-[12px] text-ds-text-muted truncate">{calc.pathology}</p>
+          </div>
+          <span className="text-ds-text-muted text-sm">→</span>
+        </div>
+      ))}
 
       {/* Tests count banner */}
       <div className="animate-fade-in-up stagger-2 relative overflow-hidden rounded-2xl p-4 mb-6"

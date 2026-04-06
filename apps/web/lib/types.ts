@@ -69,6 +69,7 @@ export type Screen =
   | "test"
   | "result"
   | "qr"
-  | "patient";
+  | "patient"
+  | "calculator";
 
 export type AppTab = "dashboard" | "search" | "settings";
