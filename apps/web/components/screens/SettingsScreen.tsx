@@ -1,9 +1,8 @@
 "use client";
 import { Badge } from "@/components/ui/Badge";
-import { supabase } from "@/lib/supabase";
 import type { Doctor } from "@/lib/types";
 
-export function SettingsScreen({ doctor }: { doctor: Doctor }) {
+export function SettingsScreen({ doctor, onLogout }: { doctor: Doctor; onLogout: () => void }) {
   const items = [
     { icon: "👤", label: "Modifier mon profil" },
     { icon: "🏥", label: "Changer de spécialité" },
@@ -50,7 +49,7 @@ export function SettingsScreen({ doctor }: { doctor: Doctor }) {
       ))}
 
       <button
-        onClick={() => supabase.auth.signOut()}
+        onClick={onLogout}
         className="w-full mt-6 py-3.5 rounded-[14px] border border-ds-error/20 text-ds-error text-[14px] font-bold hover:bg-ds-error/5 active:scale-[0.98] transition-all"
       >
         Se déconnecter

@@ -1,0 +1,27 @@
+test_id,acronyme,nom_complet,categorie,specialites,pathologie,description,nb_parametres,score_max,libre_droits,priorite
+score2,SCORE2,Systematic COronary Risk Evaluation 2,Cardiologie,"Cardiologie, Médecine générale, Endocrinologie",Risque cardiovasculaire à 10 ans (prévention primaire),"Calculateur ESC 2021 du risque d'événement CV fatal et non fatal à 10 ans. Remplace l'ancien SCORE (2003). Applicable aux 40-69 ans sans ATCD CV ni diabète. SCORE2-OP pour les 70-89 ans.",5,,Oui (ESC 2021 - libre d'usage clinique),P1
+
+param_id,test_id,numero,texte_parametre_fr,type_saisie,options_ou_unite,valeurs,notes_instructions
+p1,score2,1,Âge du patient,nombre,"Années (40-69 pour SCORE2, 70-89 pour SCORE2-OP)",,Le modèle change à 70 ans : basculer vers SCORE2-OP
+p2,score2,2,Sexe,choix,"Homme | Femme",,Les coefficients de risque diffèrent entre hommes et femmes
+p3,score2,3,Statut tabagique,choix,"Fumeur actuel | Non-fumeur",,Fumeur actuel = fumeur quotidien ou occasionnel. Ex-fumeur depuis >1 an = non-fumeur
+p4,score2,4,Pression artérielle systolique,nombre,"mmHg (90-200)",,"Prendre la moyenne de 2 mesures au repos. Valeur normale <140 mmHg"
+p5,score2,5,Cholestérol non-HDL,nombre,"mmol/L (calculé : cholestérol total - HDL)",,"Non-HDL = cholestérol total - HDL-cholestérol. 1 g/L = 2.59 mmol/L. Peut aussi utiliser cholestérol total + HDL séparément"
+
+scoring_id,test_id,region,age_group,seuil_bas_pct,seuil_haut_pct,interpretation,severite,couleur,action_clinique
+s1,score2,France (risque modéré),40-49 ans,0,2.49,Risque faible,Normal,#2db87d,"Conseils hygiéno-diététiques. Pas de traitement médicamenteux en prévention primaire"
+s2,score2,France (risque modéré),40-49 ans,2.5,7.49,Risque modéré,Modéré,#e8943a,"Discussion intervention sur facteurs de risque. Envisager traitement si FdR non contrôlés"
+s3,score2,France (risque modéré),40-49 ans,7.5,100,Risque élevé,Sévère,#e05252,"Traitement recommandé : statine + contrôle tensionnel. Objectif LDL-c selon niveau de risque"
+s4,score2,France (risque modéré),50-69 ans,0,4.99,Risque faible,Normal,#2db87d,"Conseils hygiéno-diététiques"
+s5,score2,France (risque modéré),50-69 ans,5,9.99,Risque modéré,Modéré,#e8943a,"Discussion intervention sur facteurs de risque"
+s6,score2,France (risque modéré),50-69 ans,10,100,Risque élevé,Sévère,#e05252,"Traitement recommandé"
+s7,score2,France (risque modéré),70+ ans (SCORE2-OP),0,7.49,Risque faible,Normal,#2db87d,"À partir de 70 ans un traitement par statine en prévention primaire peut être envisagé si risque élevé (ESC 2021)"
+s8,score2,France (risque modéré),70+ ans (SCORE2-OP),7.5,14.99,Risque modéré,Modéré,#e8943a,"Envisager traitement"
+s9,score2,France (risque modéré),70+ ans (SCORE2-OP),15,100,Risque élevé,Sévère,#e05252,"Traitement recommandé"
+
+notes_generales
+"SCORE2 n'est PAS un questionnaire classique — c'est un CALCULATEUR algorithmique. Le résultat est un pourcentage de risque à 10 ans."
+"La France est classée en zone de risque MODÉRÉ par l'ESC (avec Belgique, Allemagne, Autriche, Grèce, etc.)"
+"Ne s'applique PAS aux patients avec : ATCD CV (prévention secondaire), diabète (utiliser SCORE2-Diabetes), IRC sévère, hypercholestérolémie familiale"
+"L'algorithme exact utilise des coefficients de régression de Cox calibrés par région — pas un simple score additif. L'implémentation dans l'app nécessitera le calcul algorithmique complet (disponible dans le supplementary material de la publication ESC 2021)"
+"Référence : SCORE2 Working Group. European Heart Journal 2021;42(25):2439-2454"

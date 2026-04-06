@@ -27,7 +27,7 @@ export function LoginScreen({ onLogin }: { onLogin: () => void }) {
     setLoading(true);
     try {
       if (isSignUp) {
-        const { error: signUpError } = await supabase.auth.signUp({ email, password });
+        const { error: signUpError } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: window.location.origin } });
         if (signUpError) { setError(signUpError.message); setLoading(false); return; }
       } else {
         const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });

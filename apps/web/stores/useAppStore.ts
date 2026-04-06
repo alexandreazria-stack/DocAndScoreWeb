@@ -17,6 +17,7 @@ interface AppState {
   setSelectedTest: (test: Questionnaire | null) => void;
   setResult: (result: TestResult | null) => void;
   goHome: () => void;
+  logout: () => void;
 }
 
 export const useAppStore = create<AppState>()(
@@ -36,6 +37,14 @@ export const useAppStore = create<AppState>()(
       goHome: () =>
         set({
           screen: "app",
+          activeTab: "dashboard",
+          selectedTest: null,
+          result: null,
+        }),
+      logout: () =>
+        set({
+          doctor: null,
+          screen: "login",
           activeTab: "dashboard",
           selectedTest: null,
           result: null,

@@ -39,7 +39,12 @@
       "Bash(railway redeploy:*)",
       "Bash(vercel domains:*)",
       "Bash(curl -sI https://docandscore.fr)",
-      "Bash(npx supabase:*)"
+      "Bash(npx supabase:*)",
+      "Bash(node_modules/.bin/tsc --noEmit)",
+      "Bash(railway version:*)",
+      "Bash(npm i:*)",
+      "Bash(vercel --prod)",
+      "Bash(railway status:*)"
     ]
   }
 }

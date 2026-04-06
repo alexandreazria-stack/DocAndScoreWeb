@@ -19,7 +19,7 @@ import type { Calculator } from "@/lib/calculators/types";
 export default function Home() {
   const {
     screen, doctor, activeTab, selectedTest, result,
-    setScreen, setDoctor, setActiveTab, setSelectedTest, setResult, goHome,
+    setScreen, setDoctor, setActiveTab, setSelectedTest, setResult, goHome, logout,
   } = useAppStore();
   const [showPatientDemo, setShowPatientDemo] = useState(false);
   const [authReady, setAuthReady] = useState(false);
@@ -75,6 +75,10 @@ export default function Home() {
   const handleSelectCalculator = (calc: Calculator) => {
     setSelectedCalculator(calc);
     setScreen("calculator");
+  };
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    logout();
   };
 
   const shell = (children: React.ReactNode) => (
@@ -132,7 +136,7 @@ export default function Home() {
         />
       )}
       {screen === "app" && activeTab === "settings" && (
-        <SettingsScreen doctor={doctor} />
+        <SettingsScreen doctor={doctor} onLogout={handleLogout} />
       )}
       {screen === "test" && selectedTest && (
         <TestScreen
