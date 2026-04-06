@@ -35,7 +35,7 @@ export default function Home() {
   };
 
   const shell = (children: React.ReactNode) => (
-    <div className="font-display text-ds-text bg-ds-bg min-h-dvh relative overflow-x-hidden">
+    <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, overflow: "auto", background: "#EAEFF3", zIndex: 9999 }} className="font-display text-ds-text">
       {children}
     </div>
   );
