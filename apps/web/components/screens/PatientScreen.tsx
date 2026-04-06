@@ -13,6 +13,8 @@ export function PatientScreen({
   doctor: Doctor;
   onComplete: () => void;
 }) {
+  const [initials, setInitials] = useState("");
+  const [started, setStarted] = useState(false);
   const [currentQ, setCurrentQ] = useState(0);
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [submitted, setSubmitted] = useState(false);
@@ -33,6 +35,44 @@ export function PatientScreen({
         <button onClick={onComplete} className="text-ds-text-muted text-[13px] font-semibold hover:text-ds-text transition-colors animate-fade-in stagger-3">
           ← Retour à la démo
         </button>
+      </div>
+    );
+  }
+
+  if (!started) {
+    return (
+      <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, overflow: "auto", background: "#fff" }} className="flex flex-col items-center justify-center px-6 grain">
+        <div className="w-full max-w-sm">
+          <div className="text-center mb-8">
+            <Logo size="md" />
+            <p className="text-ds-text-muted text-[14px] mt-3 font-medium">
+              Prescrit par {doctor.title} {doctor.lastName}
+            </p>
+          </div>
+
+          <div className="bg-ds-offwhite/60 rounded-2xl p-6 border border-ds-border/40 mb-6">
+            <div className="text-[18px] font-extrabold mb-1">{test.name}</div>
+            <div className="text-[13px] text-ds-text-muted">{test.questions.length} questions · {test.duration}</div>
+          </div>
+
+          <label className="text-[12px] font-bold text-ds-text-secondary/80 uppercase tracking-wider block mb-2">
+            Vos initiales
+          </label>
+          <input
+            value={initials}
+            onChange={(e) => setInitials(e.target.value.toUpperCase().slice(0, 4))}
+            placeholder="ex: J.M."
+            className="w-full bg-ds-offwhite/80 rounded-[14px] border border-ds-border/50 px-4 py-3.5 text-[18px] font-bold text-ds-text text-center tracking-widest outline-none focus:border-ds-sky/40 focus:bg-white transition-all mb-6"
+          />
+
+          <button
+            onClick={() => setStarted(true)}
+            disabled={initials.trim().length === 0}
+            className="w-full py-4 rounded-[16px] text-[16px] font-bold bg-gradient-to-r from-ds-sky to-[#3D8DB5] text-white shadow-md disabled:opacity-30 disabled:pointer-events-none hover:-translate-y-0.5 active:scale-[0.98] transition-all"
+          >
+            Commencer le questionnaire →
+          </button>
+        </div>
       </div>
     );
   }
