@@ -44,7 +44,7 @@ export function OnboardingScreen({ onComplete }: { onComplete: (profile: Doctor)
   const canContinue = [lastName && firstName, true, specialty][step];
 
   return (
-    <div className="min-h-dvh bg-ambient grain flex flex-col items-center px-5 pt-10 pb-8">
+    <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, overflow: "auto", background: "#EAEFF3", zIndex: 9999 }} className="flex flex-col items-center px-5 pt-10 pb-8">
       {/* Decorative orbs */}
       <div className="absolute top-[10%] left-[-5%] w-[300px] h-[300px] rounded-full bg-ds-sky/[0.06] blur-[60px] pointer-events-none" />
       <div className="absolute bottom-[20%] right-[-5%] w-[250px] h-[250px] rounded-full bg-ds-success/[0.04] blur-[60px] pointer-events-none" />

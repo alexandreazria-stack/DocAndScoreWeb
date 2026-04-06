@@ -31,7 +31,7 @@ export function LoginScreen({ onLogin }: { onLogin: () => void }) {
   };
 
   return (
-    <div className="min-h-full flex flex-col items-center justify-center relative overflow-hidden bg-ambient grain">
+    <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", overflow: "auto", background: "#EAEFF3", zIndex: 9999 }}>
       {/* Decorative orbs */}
       <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] rounded-full bg-ds-sky/[0.07] blur-[80px] pointer-events-none" />
       <div className="absolute bottom-[-15%] right-[-10%] w-[400px] h-[400px] rounded-full bg-ds-pro/[0.05] blur-[80px] pointer-events-none" />
