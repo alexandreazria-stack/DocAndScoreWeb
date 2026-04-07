@@ -39,11 +39,12 @@ export default function Home() {
           }
         }
       } catch {
-        // profile load failed — go to onboarding
         if (session) setScreen("onboarding");
       } finally {
         setAuthReady(true);
       }
+    }).catch(() => {
+      setAuthReady(true);
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
