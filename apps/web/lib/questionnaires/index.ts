@@ -874,7 +874,6 @@ export const QUESTIONNAIRES: Questionnaire[] = [
     ],
     questions: [
       {
-        id: "hamd1",
         text: "Humeur dépressive (tristesse, désespoir, impuissance, inutilité)",
         type: "likert",
         options: [
@@ -884,9 +883,9 @@ export const QUESTIONNAIRES: Questionnaire[] = [
           { value: 3, label: "Le patient communique ces états affectifs non verbalement (expression faciale, voix, pleurs)" },
           { value: 4, label: "Le patient ne communique pratiquement que ces états affectifs dans ses communications spontanées verbales et non verbales" },
         ],
+        maxPoints: 4,
       },
       {
-        id: "hamd2",
         text: "Sentiment de culpabilité",
         type: "likert",
         options: [
@@ -896,9 +895,9 @@ export const QUESTIONNAIRES: Questionnaire[] = [
           { value: 3, label: "La maladie actuelle est une punition. Idées délirantes de culpabilité" },
           { value: 4, label: "Entend des voix qui l'accusent ou le dénoncent et/ou a des hallucinations visuelles menaçantes" },
         ],
+        maxPoints: 4,
       },
       {
-        id: "hamd3",
         text: "Suicide",
         type: "likert",
         options: [
@@ -908,9 +907,9 @@ export const QUESTIONNAIRES: Questionnaire[] = [
           { value: 3, label: "Idées suicidaires ou comportement suicidaire" },
           { value: 4, label: "Tentatives de suicide (coter 4 toute tentative sérieuse)" },
         ],
+        maxPoints: 4,
       },
       {
-        id: "hamd4",
         text: "Insomnie du début de nuit",
         type: "likert",
         options: [
@@ -918,9 +917,9 @@ export const QUESTIONNAIRES: Questionnaire[] = [
           { value: 1, label: "Se plaint de difficultés occasionnelles à s'endormir, par ex. plus de 30 min" },
           { value: 2, label: "Se plaint de difficultés à s'endormir chaque nuit" },
         ],
+        maxPoints: 2,
       },
       {
-        id: "hamd5",
         text: "Insomnie du milieu de nuit",
         type: "likert",
         options: [
@@ -928,9 +927,9 @@ export const QUESTIONNAIRES: Questionnaire[] = [
           { value: 1, label: "Le patient se plaint d'être agité et perturbé pendant la nuit" },
           { value: 2, label: "Réveils au cours de la nuit – tout lever du lit coté 2 (sauf si prescrit)" },
         ],
+        maxPoints: 2,
       },
       {
-        id: "hamd6",
         text: "Insomnie du petit matin",
         type: "likert",
         options: [
@@ -938,9 +937,9 @@ export const QUESTIONNAIRES: Questionnaire[] = [
           { value: 1, label: "Se réveille tôt le matin mais se rendort" },
           { value: 2, label: "Incapable de se rendormir s'il se lève" },
         ],
+        maxPoints: 2,
       },
       {
-        id: "hamd7",
         text: "Travail et activités",
         type: "likert",
         options: [
@@ -950,9 +949,9 @@ export const QUESTIONNAIRES: Questionnaire[] = [
           { value: 3, label: "Diminution du temps consacré à ses activités ou diminution de la productivité" },
           { value: 4, label: "A arrêté de travailler du fait de la maladie actuelle. Coter 4 si le patient ne s'occupe d'aucune activité sinon brève routine d'entretien quotidien" },
         ],
+        maxPoints: 4,
       },
       {
-        id: "hamd8",
         text: "Ralentissement (lenteur de la pensée et du discours, troubles de la concentration, diminution de l'activité motrice)",
         type: "likert",
         options: [
@@ -962,9 +961,9 @@ export const QUESTIONNAIRES: Questionnaire[] = [
           { value: 3, label: "Entretien difficile" },
           { value: 4, label: "Stupeur totale" },
         ],
+        maxPoints: 4,
       },
       {
-        id: "hamd9",
         text: "Agitation",
         type: "likert",
         options: [
@@ -974,9 +973,9 @@ export const QUESTIONNAIRES: Questionnaire[] = [
           { value: 3, label: "Ne peut pas tenir en place, a besoin de bouger" },
           { value: 4, label: "Se tord les mains, se ronge les ongles, s'arrache les cheveux, se mord les lèvres" },
         ],
+        maxPoints: 4,
       },
       {
-        id: "hamd10",
         text: "Anxiété psychique",
         type: "likert",
         options: [
@@ -986,9 +985,9 @@ export const QUESTIONNAIRES: Questionnaire[] = [
           { value: 3, label: "Attitude anxieuse apparente dans l'expression faciale ou le discours" },
           { value: 4, label: "Peurs exprimées sans qu'on les interroge" },
         ],
+        maxPoints: 4,
       },
       {
-        id: "hamd11",
         text: "Anxiété somatique (bouche sèche, flatulences, indigestion, diarrhée, coliques, palpitations, céphalées, hyperventilation, soupirs)",
         type: "likert",
         options: [
@@ -998,9 +997,9 @@ export const QUESTIONNAIRES: Questionnaire[] = [
           { value: 3, label: "Sévère" },
           { value: 4, label: "Incapacitante" },
         ],
+        maxPoints: 4,
       },
       {
-        id: "hamd12",
         text: "Symptômes somatiques gastro-intestinaux",
         type: "likert",
         options: [
@@ -1008,9 +1007,9 @@ export const QUESTIONNAIRES: Questionnaire[] = [
           { value: 1, label: "Perte d'appétit mais mange sans y être poussé. Sentiment de lourdeur abdominale" },
           { value: 2, label: "A du mal à manger sans y être encouragé. Demande ou a besoin de laxatifs, médicaments intestinaux ou gastro-intestinaux" },
         ],
+        maxPoints: 2,
       },
       {
-        id: "hamd13",
         text: "Symptômes somatiques généraux",
         type: "likert",
         options: [
@@ -1018,9 +1017,9 @@ export const QUESTIONNAIRES: Questionnaire[] = [
           { value: 1, label: "Lourdeur dans les membres, dans le dos ou la tête. Douleurs dorsales, céphalées, douleurs musculaires. Perte d'énergie et fatigabilité" },
           { value: 2, label: "Tout symptôme cotable 2 si nettement marqué" },
         ],
+        maxPoints: 2,
       },
       {
-        id: "hamd14",
         text: "Symptômes génitaux (perte de libido, troubles menstruels)",
         type: "likert",
         options: [
@@ -1028,9 +1027,9 @@ export const QUESTIONNAIRES: Questionnaire[] = [
           { value: 1, label: "Légers" },
           { value: 2, label: "Sévères" },
         ],
+        maxPoints: 2,
       },
       {
-        id: "hamd15",
         text: "Hypocondrie",
         type: "likert",
         options: [
@@ -1040,9 +1039,9 @@ export const QUESTIONNAIRES: Questionnaire[] = [
           { value: 3, label: "Se plaint fréquemment, demande de l'aide, etc." },
           { value: 4, label: "Idées délirantes hypochondriaques" },
         ],
+        maxPoints: 4,
       },
       {
-        id: "hamd16",
         text: "Perte de poids (coter A ou B)",
         type: "likert",
         options: [
@@ -1050,9 +1049,9 @@ export const QUESTIONNAIRES: Questionnaire[] = [
           { value: 1, label: "Probable perte de poids associée à la maladie actuelle" },
           { value: 2, label: "Perte de poids certaine (selon le patient)" },
         ],
+        maxPoints: 2,
       },
       {
-        id: "hamd17",
         text: "Prise de conscience de la maladie",
         type: "likert",
         options: [
@@ -1060,6 +1059,7 @@ export const QUESTIONNAIRES: Questionnaire[] = [
           { value: 1, label: "Reconnaît être malade mais attribue la cause à la mauvaise nourriture, au climat, au surmenage, à un virus, à un besoin de repos, etc." },
           { value: 2, label: "Nie être malade du tout" },
         ],
+        maxPoints: 2,
       },
     ],
   },
