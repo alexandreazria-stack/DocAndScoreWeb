@@ -2,7 +2,7 @@ export interface ScoringBracket {
   min: number;
   max: number;
   label: string;
-  severity: "normal" | "mild" | "moderate" | "severe" | "critical" | "alert";
+  severity: "normal" | "mild" | "moderate" | "severe" | "critical" | "alert" | "very-severe";
   color: string;
   action?: string;
 }
