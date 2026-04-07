@@ -28,16 +28,22 @@ export default function Home() {
   // Listen for Supabase auth state
   useEffect(() => {
     supabase.auth.getSession().then(async ({ data: { session } }) => {
-      if (session) {
-        const profile = await loadProfile();
-        if (profile) {
-          setDoctor(profile);
-          setScreen("app");
-        } else {
-          setScreen("onboarding");
+      try {
+        if (session) {
+          const profile = await loadProfile();
+          if (profile) {
+            setDoctor(profile);
+            setScreen("app");
+          } else {
+            setScreen("onboarding");
+          }
         }
+      } catch {
+        // profile load failed — go to onboarding
+        if (session) setScreen("onboarding");
+      } finally {
+        setAuthReady(true);
       }
-      setAuthReady(true);
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
