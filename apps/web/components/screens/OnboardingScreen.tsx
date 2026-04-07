@@ -73,7 +73,6 @@ export function OnboardingScreen({ onComplete }: { onComplete: (profile: Doctor)
           {step === 0 && (
             <>
               <div className="flex items-center gap-2.5 mb-1">
-                <span className="text-[24px]">🩺</span>
                 <h3 className="text-lg font-extrabold tracking-tight">Votre identité</h3>
               </div>
               <p className="text-ds-text-muted text-[13px] mb-6">Étape 1/3</p>
@@ -103,7 +102,6 @@ export function OnboardingScreen({ onComplete }: { onComplete: (profile: Doctor)
           {step === 1 && (
             <>
               <div className="flex items-center gap-2.5 mb-1">
-                <span className="text-[24px]">📧</span>
                 <h3 className="text-lg font-extrabold tracking-tight">Vos coordonnées</h3>
               </div>
               <p className="text-ds-text-muted text-[13px] mb-6">Étape 2/3</p>
@@ -125,7 +123,6 @@ export function OnboardingScreen({ onComplete }: { onComplete: (profile: Doctor)
           {step === 2 && (
             <>
               <div className="flex items-center gap-2.5 mb-1">
-                <span className="text-[24px]">🏥</span>
                 <h3 className="text-lg font-extrabold tracking-tight">Votre spécialité</h3>
               </div>
               <p className="text-ds-text-muted text-[13px] mb-5">Étape 3/3 — Personnalise vos tests recommandés</p>

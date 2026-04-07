@@ -59,7 +59,6 @@ export function LoginScreen({ onLogin }: { onLogin: () => void }) {
       <div className="relative z-10 w-full max-w-[440px] px-6 sm:px-0">
         {/* Header */}
         <div className="text-center mb-8 animate-fade-in-up">
-          <div className="mb-4 text-6xl opacity-15 animate-float">🩺</div>
           <Logo size="lg" />
           <p className="text-ds-text-muted text-[15px] mt-3 font-medium tracking-wide">
             Scores cliniques validés
@@ -100,7 +99,6 @@ export function LoginScreen({ onLogin }: { onLogin: () => void }) {
             Email professionnel
           </label>
           <div className="flex items-center gap-2.5 bg-ds-offwhite/80 rounded-[14px] border border-ds-border/60 px-4 py-3.5 focus-within:border-ds-sky/50 focus-within:bg-white focus-within:glow-sky transition-all duration-200">
-            <span className="text-lg opacity-40">✉️</span>
             <input
               value={email}
               onChange={(e) => setEmail(e.target.value)}

@@ -4,12 +4,12 @@ import type { Doctor } from "@/lib/types";
 
 export function SettingsScreen({ doctor, onLogout }: { doctor: Doctor; onLogout: () => void }) {
   const items = [
-    { icon: "👤", label: "Modifier mon profil" },
-    { icon: "🏥", label: "Changer de spécialité" },
-    { icon: "⭐", label: "Nouveautés", badge: false },
-    { icon: "🔒", label: "Confidentialité" },
-    { icon: "❓", label: "Aide & support" },
-    { icon: "📄", label: "Mentions légales" },
+    { label: "Modifier mon profil" },
+    { label: "Changer de spécialité" },
+    { label: "Nouveautés", badge: false },
+    { label: "Confidentialité" },
+    { label: "Aide & support" },
+    { label: "Mentions légales" },
   ];
 
   return (
@@ -38,9 +38,6 @@ export function SettingsScreen({ doctor, onLogout }: { doctor: Doctor; onLogout:
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3.5">
-              <div className="w-9 h-9 rounded-[10px] bg-ds-offwhite/80 flex items-center justify-center text-lg">
-                {item.icon}
-              </div>
               <span className="text-[14px] font-semibold">{item.label}</span>
             </div>
             {item.badge ? <Badge variant="pro">PRO</Badge> : <span className="text-ds-text-muted/40 text-lg">›</span>}

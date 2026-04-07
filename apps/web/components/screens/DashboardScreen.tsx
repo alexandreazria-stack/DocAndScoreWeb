@@ -140,8 +140,7 @@ export function DashboardScreen({
 
       <div className="animate-fade-in-up stagger-1">
         <h1 className="text-[24px] sm:text-[30px] font-extrabold mt-5 mb-1 tracking-tight leading-tight">
-          Bonjour {doctor.title} {doctor.lastName}{" "}
-          <span className="inline-block animate-float">👋</span>
+          Bonjour {doctor.title} {doctor.lastName}
         </h1>
         <p className="text-ds-text-muted text-[14px] mb-5 font-medium">
           {new Date().toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })}
@@ -180,7 +179,7 @@ export function DashboardScreen({
         }}
       >
         <span className="text-[13px] text-ds-sky font-semibold">
-          📋 {freeTests.length} tests cliniques disponibles
+          {freeTests.length} tests cliniques disponibles
         </span>
       </div>
 
@@ -189,9 +188,6 @@ export function DashboardScreen({
         onClick={() => onNavigate("search")}
         className="animate-fade-in-up stagger-2 ds-card ds-card-hover flex items-center gap-3.5 p-4 mb-7 cursor-pointer"
       >
-        <div className="w-10 h-10 rounded-[12px] bg-ds-sky/8 flex items-center justify-center">
-          <span className="text-lg">🔍</span>
-        </div>
         <span className="text-ds-text-muted text-[15px] font-medium">Rechercher un test...</span>
       </div>
 
@@ -238,13 +234,13 @@ export function DashboardScreen({
                     onClick={() => onSelectTest(test)}
                     className="flex-1 py-2.5 rounded-[12px] bg-gradient-to-r from-ds-sky to-[#3D8DB5] text-white text-[12px] font-bold shadow-sm hover:shadow-md hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-200"
                   >
-                    📋 Médecin
+                    Médecin
                   </button>
                   <button
                     onClick={() => onSelectQR(test)}
                     className="flex-1 py-2.5 rounded-[12px] bg-ds-sky/8 text-ds-sky text-[12px] font-bold hover:bg-ds-sky/12 active:scale-[0.98] transition-all duration-200"
                   >
-                    📱 QR Patient
+                    QR Patient
                   </button>
                 </div>
               </div>
