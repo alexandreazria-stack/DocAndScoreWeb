@@ -116,12 +116,14 @@ export function DashboardScreen({
   onSelectTest,
   onSelectQR,
   onSelectCalculator,
+  onHistory,
 }: {
   doctor: Doctor;
   onNavigate: (tab: AppTab) => void;
   onSelectTest: (test: Questionnaire) => void;
   onSelectQR: (test: Questionnaire) => void;
   onSelectCalculator: (calc: Calculator) => void;
+  onHistory: () => void;
 }) {
   const freeTests = QUESTIONNAIRES.filter((q) => q.questions.length > 0);
   const proTests: Questionnaire[] = [];
@@ -181,12 +183,22 @@ export function DashboardScreen({
         </span>
       </div>
 
-      {/* Search card */}
-      <div
-        onClick={() => onNavigate("search")}
-        className="animate-fade-in-up stagger-2 ds-card ds-card-hover flex items-center gap-3.5 p-4 mb-7 cursor-pointer"
-      >
-        <span className="text-ds-text-muted text-[15px] font-medium">Rechercher un test...</span>
+      {/* Quick actions row */}
+      <div className="flex gap-2.5 mb-5 animate-fade-in-up stagger-2">
+        <div
+          onClick={() => onNavigate("search")}
+          className="flex-1 ds-card ds-card-hover flex items-center gap-2.5 p-4 cursor-pointer"
+        >
+          <span className="text-[18px]">🔍</span>
+          <span className="text-ds-text-muted text-[13px] font-medium">Rechercher un test...</span>
+        </div>
+        <div
+          onClick={onHistory}
+          className="ds-card ds-card-hover flex items-center gap-2 px-4 py-4 cursor-pointer shrink-0"
+        >
+          <span className="text-[18px]">📋</span>
+          <span className="text-[13px] font-bold text-ds-sky">Historique</span>
+        </div>
       </div>
 
       {/* Free tests */}

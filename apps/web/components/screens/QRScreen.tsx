@@ -63,7 +63,7 @@ export function QRScreen({
       completedHandled.current = true;
       const score = updated.totalScore ?? 0;
       const bracket = getScoring(test, score);
-      setTimeout(() => onResult({ test, answers: updated.answers, totalScore: score, scoring: bracket }), SESSION_RESULT_DELAY_MS);
+      setTimeout(() => onResult({ test, answers: updated.answers, totalScore: score, scoring: bracket, sessionCode: updated.code }), SESSION_RESULT_DELAY_MS);
     }
   }, [test, onResult]);
 

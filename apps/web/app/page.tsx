@@ -10,9 +10,10 @@ import { QRScreen } from "@/components/screens/QRScreen";
 import { PatientScreen } from "@/components/screens/PatientScreen";
 import { SettingsScreen } from "@/components/screens/SettingsScreen";
 import { CalculatorScreen } from "@/components/screens/CalculatorScreen";
+import { HistoryScreen } from "@/components/screens/HistoryScreen";
 import { BottomNav } from "@/components/ui/BottomNav";
 import { useState, useEffect } from "react";
-import { supabase, loadProfile, saveProfile } from "@/lib/supabase";
+import { supabase, loadProfile, saveProfile, saveTestResult } from "@/lib/supabase";
 import type { Questionnaire } from "@/lib/types";
 import type { Calculator } from "@/lib/calculators/types";
 
@@ -22,6 +23,7 @@ export default function Home() {
     setScreen, setDoctor, setActiveTab, setSelectedTest, setResult, goHome, logout,
   } = useAppStore();
   const [showPatientDemo, setShowPatientDemo] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
   const [authReady, setAuthReady] = useState(false);
   const [selectedCalculator, setSelectedCalculator] = useState<Calculator | null>(null);
 
@@ -143,13 +145,17 @@ export default function Home() {
 
   return shell(
     <>
-      {screen === "app" && activeTab === "dashboard" && (
+      {showHistory && (
+        <HistoryScreen onBack={() => setShowHistory(false)} />
+      )}
+      {screen === "app" && activeTab === "dashboard" && !showHistory && (
         <DashboardScreen
           doctor={doctor}
           onNavigate={setActiveTab}
           onSelectTest={handleSelectTest}
           onSelectQR={handleSelectQR}
           onSelectCalculator={handleSelectCalculator}
+          onHistory={() => setShowHistory(true)}
         />
       )}
       {screen === "app" && activeTab === "search" && (
@@ -167,7 +173,11 @@ export default function Home() {
         <TestScreen
           test={selectedTest}
           onBack={goHome}
-          onResult={(r) => { setResult(r); setScreen("result"); }}
+          onResult={(r) => {
+            setResult(r);
+            setScreen("result");
+            saveTestResult(r).catch(console.error);
+          }}
         />
       )}
       {screen === "result" && result && (
@@ -183,7 +193,11 @@ export default function Home() {
           test={selectedTest}
           doctor={doctor}
           onBack={goHome}
-          onResult={(r) => { setResult(r); setScreen("result"); }}
+          onResult={(r) => {
+            setResult(r);
+            setScreen("result");
+            saveTestResult(r).catch(console.error);
+          }}
           onShowPatient={() => setShowPatientDemo(true)}
         />
       )}

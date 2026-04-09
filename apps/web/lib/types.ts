@@ -61,6 +61,22 @@ export interface TestResult {
   answers: Record<number, number>;
   totalScore: number;
   scoring: ScoringBracket;
+  sessionCode?: string;
+}
+
+export interface StoredResult {
+  id: string;
+  testId: string;
+  testAcronym: string;
+  testName: string;
+  testIcon: string;
+  totalScore: number;
+  maxScore: number;
+  scoringLabel: string;
+  scoringColor: string;
+  scoringSeverity: string;
+  sessionCode: string | null;
+  createdAt: string;
 }
 
 export type Screen =
