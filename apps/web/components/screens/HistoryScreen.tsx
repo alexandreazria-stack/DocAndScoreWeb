@@ -79,21 +79,23 @@ export function HistoryScreen({ onBack }: { onBack: () => void }) {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-0.5">
-                        <span className="font-mono font-bold text-ds-sky text-[13px]">{r.testAcronym}</span>
+                        <span className="font-mono font-bold text-ds-sky text-[13px] shrink-0">{r.testAcronym}</span>
                         <span className="text-[12px] text-ds-text-secondary truncate">{r.testName}</span>
                         {r.sessionCode && (
                           <span className="text-[10px] font-mono text-ds-text-muted bg-ds-offwhite px-1.5 py-0.5 rounded-full shrink-0">
                             QR
                           </span>
                         )}
+                      </div>
+                      <div className="flex items-center gap-2 mt-0.5">
+                        <span className="text-[11px] text-ds-text-muted font-medium">
+                          {formatTimeFR(new Date(r.createdAt))}
+                        </span>
                         {r.patientInitials && (
-                          <span className="text-[10px] font-bold text-ds-sky bg-ds-sky/8 px-1.5 py-0.5 rounded-full shrink-0">
+                          <span className="text-[11px] font-bold text-ds-sky bg-ds-sky/10 px-2 py-0.5 rounded-full tracking-wide">
                             {r.patientInitials}
                           </span>
                         )}
-                      </div>
-                      <div className="text-[11px] text-ds-text-muted font-medium">
-                        {formatTimeFR(new Date(r.createdAt))}
                       </div>
                     </div>
                     <div className="text-right shrink-0">
