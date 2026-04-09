@@ -1,12 +1,16 @@
 "use client";
 import { useState, useEffect } from "react";
 import { loadLocalHistory, recoverCompletedSessions } from "@/lib/history";
+import { HistoryDetailScreen } from "@/components/screens/HistoryDetailScreen";
 import { formatDateFR, formatTimeFR } from "@/lib/utils/formatDate";
+import { useAppStore } from "@/stores/useAppStore";
 import type { StoredResult } from "@/lib/types";
 
 export function HistoryScreen({ onBack }: { onBack: () => void }) {
+  const { doctor } = useAppStore();
   const [results, setResults] = useState<StoredResult[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selected, setSelected] = useState<StoredResult | null>(null);
 
   useEffect(() => {
     recoverCompletedSessions().finally(() => {
@@ -21,6 +25,10 @@ export function HistoryScreen({ onBack }: { onBack: () => void }) {
     acc[day].push(r);
     return acc;
   }, {});
+
+  if (selected && doctor) {
+    return <HistoryDetailScreen result={selected} doctor={doctor} onBack={() => setSelected(null)} />;
+  }
 
   return (
     <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, overflow: "auto", background: "#EAEFF3", zIndex: 9999 }} className="font-display text-ds-text">
@@ -64,7 +72,7 @@ export function HistoryScreen({ onBack }: { onBack: () => void }) {
 
             <div className="flex flex-col gap-2">
               {dayResults.map((r) => (
-                <div key={r.id} className="ds-card p-4">
+                <div key={r.id} className="ds-card ds-card-hover p-4 cursor-pointer" onClick={() => setSelected(r)}>
                   <div className="flex items-center gap-3">
                     <div className="w-11 h-11 rounded-[12px] bg-ds-offwhite flex items-center justify-center text-[22px] shrink-0">
                       {r.testIcon}
@@ -103,6 +111,7 @@ export function HistoryScreen({ onBack }: { onBack: () => void }) {
                         {r.scoringLabel}
                       </div>
                     </div>
+                    <span className="text-ds-text-muted text-sm ml-1">→</span>
                   </div>
                 </div>
               ))}

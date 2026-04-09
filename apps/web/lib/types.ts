@@ -78,6 +78,7 @@ export interface StoredResult {
   scoringSeverity: string;
   sessionCode: string | null;
   patientInitials: string | null;
+  answers: Record<number, number>;
   createdAt: string;
 }
 

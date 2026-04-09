@@ -27,6 +27,7 @@ export function saveResultLocally(result: TestResult): void {
     scoringSeverity: result.scoring.severity,
     sessionCode: result.sessionCode ?? null,
     patientInitials: result.patientInitials ?? null,
+    answers: result.answers,
     createdAt: new Date().toISOString(),
   };
   try {
@@ -107,7 +108,7 @@ export async function recoverCompletedSessions(): Promise<void> {
           const scoring = getScoring(test, score);
           saveResultLocally({
             test,
-            answers: session.answers,
+            answers: session.answers ?? {},
             totalScore: score,
             scoring,
             sessionCode: p.code,
