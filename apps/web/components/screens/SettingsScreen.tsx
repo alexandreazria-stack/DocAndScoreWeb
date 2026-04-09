@@ -24,7 +24,7 @@ export function SettingsScreen({ doctor, onLogout }: { doctor: Doctor; onLogout:
           </div>
           <div>
             <div className="font-extrabold text-[16px] tracking-tight">{doctor.title} {doctor.firstName} {doctor.lastName}</div>
-            <div className="text-ds-text-muted text-[13px] mb-1">dr.martin@gmail.com</div>
+            <div className="text-ds-text-muted text-[13px] mb-1">{doctor.email ?? ""}</div>
             <Badge variant="sky">BETA</Badge>
           </div>
         </div>

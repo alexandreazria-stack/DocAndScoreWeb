@@ -27,31 +27,46 @@ export default function Home() {
 
   // Listen for Supabase auth state
   useEffect(() => {
+    let isMounted = true;
+
+    // Safety net: if Supabase hangs (e.g. paused project, network issue),
+    // always unblock the UI after 6s and show login screen.
+    const authTimeout = setTimeout(() => {
+      if (isMounted) setAuthReady(true);
+    }, 6000);
+
     supabase.auth.getSession().then(async ({ data: { session } }) => {
+      // isMounted check is INSIDE the try so the finally always clears authTimeout
       try {
-        if (session) {
+        if (session && isMounted) {
           const profile = await loadProfile();
-          if (profile) {
-            setDoctor(profile);
-            setScreen("app");
-          } else {
-            setScreen("onboarding");
+          if (isMounted) {
+            if (profile) {
+              setDoctor({ ...profile, email: session.user.email });
+              setScreen("app");
+            } else {
+              setScreen("onboarding");
+            }
           }
         }
       } catch {
-        if (session) setScreen("onboarding");
+        if (session && isMounted) setScreen("onboarding");
       } finally {
-        setAuthReady(true);
+        clearTimeout(authTimeout);
+        if (isMounted) setAuthReady(true);
       }
     }).catch(() => {
-      setAuthReady(true);
+      clearTimeout(authTimeout);
+      if (isMounted) setAuthReady(true);
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      if (session && screen === "login") {
+      // Read current screen from store directly to avoid stale closure
+      const currentScreen = useAppStore.getState().screen;
+      if (session && currentScreen === "login") {
         const profile = await loadProfile();
         if (profile) {
-          setDoctor(profile);
+          setDoctor({ ...profile, email: session.user.email });
           setScreen("app");
         } else {
           setScreen("onboarding");
@@ -62,7 +77,10 @@ export default function Home() {
       }
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      isMounted = false;
+      subscription.unsubscribe();
+    };
   }, []);
 
   const handleLogin = () => setScreen("onboarding");

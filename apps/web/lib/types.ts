@@ -53,6 +53,7 @@ export interface Doctor {
   firstName: string;
   lastName: string;
   specialty: string;
+  email?: string;
 }
 
 export interface TestResult {

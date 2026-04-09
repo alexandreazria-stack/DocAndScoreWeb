@@ -11,12 +11,13 @@ export function ScoreGauge({ score, max, color, label }: { score: number; max: n
   const [animatedScore, setAnimatedScore] = useState(0);
 
   useEffect(() => {
-    // Trigger animation after mount
-    const raf = requestAnimationFrame(() => {
+    // Trigger arc animation after mount
+    const arcRaf = requestAnimationFrame(() => {
       setAnimatedOffset(targetOffset);
     });
 
-    // Animate score number
+    // Animate score number — track RAF id to cancel on unmount
+    let animRaf: number;
     const duration = 1200;
     const start = performance.now();
     const animate = (now: number) => {
@@ -25,11 +26,16 @@ export function ScoreGauge({ score, max, color, label }: { score: number; max: n
       // Ease out cubic
       const eased = 1 - Math.pow(1 - progress, 3);
       setAnimatedScore(Math.round(eased * score));
-      if (progress < 1) requestAnimationFrame(animate);
+      if (progress < 1) {
+        animRaf = requestAnimationFrame(animate);
+      }
     };
-    requestAnimationFrame(animate);
+    animRaf = requestAnimationFrame(animate);
 
-    return () => cancelAnimationFrame(raf);
+    return () => {
+      cancelAnimationFrame(arcRaf);
+      cancelAnimationFrame(animRaf);
+    };
   }, [score, targetOffset, halfArc]);
 
   return (

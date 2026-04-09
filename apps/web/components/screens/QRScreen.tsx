@@ -1,11 +1,14 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { QRCodeSVG } from "qrcode.react";
 import { Badge } from "@/components/ui/Badge";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { getScoring } from "@/lib/questionnaires";
-import { createSession, getPatientUrl, onSessionUpdate, getSessionByCode } from "@/lib/sessions";
-import { createSessionRemote, joinAsDoctor } from "@/lib/api";
+import { createSession, getPatientUrl } from "@/lib/sessions";
+import { createSessionRemote } from "@/lib/api";
+import { useSessionListener } from "@/hooks/useSessionListener";
+import { SESSION_STATUS_CONFIG } from "@/lib/statusConfig";
+import { SESSION_RESULT_DELAY_MS } from "@/lib/constants";
 import type { Session } from "@/lib/sessions";
 import type { Questionnaire, Doctor, TestResult } from "@/lib/types";
 
@@ -51,48 +54,28 @@ export function QRScreen({
     return () => { cancelled = true; };
   }, [test, doctor]);
 
-  // Listen for real-time updates via Socket.IO + BroadcastChannel fallback
-  useEffect(() => {
-    if (!session) return;
+  // Unified session listener (Socket.IO → BroadcastChannel → polling)
+  const handleUpdate = useCallback((updated: Session) => {
+    setStatus(updated.status);
+    setProgress({ answered: updated.answeredCount, total: updated.totalQuestions });
 
-    const handleUpdate = (updated: Session) => {
-      setStatus(updated.status);
-      setProgress({ answered: updated.answeredCount, total: updated.totalQuestions });
+    if (updated.status === "completed" && !completedHandled.current) {
+      completedHandled.current = true;
+      const score = updated.totalScore ?? 0;
+      const bracket = getScoring(test, score);
+      setTimeout(() => onResult({ test, answers: updated.answers, totalScore: score, scoring: bracket }), SESSION_RESULT_DELAY_MS);
+    }
+  }, [test, onResult]);
 
-      if (updated.status === "completed" && !completedHandled.current) {
-        completedHandled.current = true;
-        const score = updated.totalScore ?? 0;
-        const bracket = getScoring(test, score);
-        setTimeout(() => onResult({ test, answers: updated.answers, totalScore: score, scoring: bracket }), 1500);
-      }
-    };
+  useSessionListener(session?.code ?? null, handleUpdate);
 
-    // Socket.IO real-time
-    let unsubSocket: (() => void) | undefined;
+  const handleCopy = async () => {
+    if (!url) return;
     try {
-      unsubSocket = joinAsDoctor(session.code, handleUpdate);
-    } catch { /* backend not available */ }
-
-    // BroadcastChannel fallback (same-device)
-    const unsubLocal = onSessionUpdate((updated) => {
-      if (updated.code === session.code) handleUpdate(updated);
-    });
-
-    // Poll localStorage every 3s as last resort
-    const interval = setInterval(() => {
-      const fresh = getSessionByCode(session.code);
-      if (fresh) handleUpdate(fresh);
-    }, 3000);
-
-    return () => {
-      unsubSocket?.();
-      unsubLocal();
-      clearInterval(interval);
-    };
-  }, [session, test, onResult]);
-
-  const handleCopy = () => {
-    if (url) navigator.clipboard.writeText(url);
+      await navigator.clipboard.writeText(url);
+    } catch {
+      // Clipboard API not available (e.g. non-HTTPS context)
+    }
   };
 
   // Expiry countdown
@@ -111,10 +94,11 @@ export function QRScreen({
   }, [session]);
 
   const configs = {
-    waiting: { icon: "⏳", label: "En attente du patient...", color: "#8899A8", pulse: true },
-    connected: { icon: "📱", label: "Patient connecté", color: "#4A9ABF", pulse: true },
-    progress: { icon: "✍️", label: `En cours — ${progress.answered}/${progress.total}`, color: "#4A9ABF", pulse: false },
-    completed: { icon: "✅", label: "Terminé !", color: "#2FAF7E", pulse: false },
+    ...SESSION_STATUS_CONFIG,
+    waiting:  { ...SESSION_STATUS_CONFIG.waiting,  label: "En attente du patient..." },
+    connected: { ...SESSION_STATUS_CONFIG.connected, label: "Patient connecté" },
+    progress: { ...SESSION_STATUS_CONFIG.progress,  label: `En cours — ${progress.answered}/${progress.total}` },
+    completed: { ...SESSION_STATUS_CONFIG.completed, label: "Terminé !" },
   };
   const s = configs[status];
 

@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { Logo } from "@/components/ui/Logo";
+import { InputField } from "@/components/ui/InputField";
 import type { Doctor } from "@/lib/types";
 
 const TITLES = ["Dr.", "Pr.", "M.", "Mme"];
@@ -20,17 +21,6 @@ const SPECS = [
   { id: "rhumato", label: "Rhumatologie", icon: "🦴" },
   { id: "autre", label: "Autre", icon: "📋" },
 ];
-
-function InputField({ value, onChange, placeholder }: { value: string; onChange: (v: string) => void; placeholder: string }) {
-  return (
-    <input
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      placeholder={placeholder}
-      className="w-full bg-ds-offwhite/80 rounded-[14px] border border-ds-border/50 px-4 py-3.5 text-[15px] font-display text-ds-text placeholder:text-ds-text-muted/50 outline-none focus:border-ds-sky/40 focus:bg-white transition-all"
-    />
-  );
-}
 
 export function OnboardingScreen({ onComplete }: { onComplete: (profile: Doctor) => void }) {
   const [step, setStep] = useState(0);

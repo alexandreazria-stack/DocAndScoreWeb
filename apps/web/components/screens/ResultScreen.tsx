@@ -3,6 +3,9 @@ import { useState } from "react";
 import { Badge } from "@/components/ui/Badge";
 import { ScoreGauge } from "@/components/ui/ScoreGauge";
 import { Logo } from "@/components/ui/Logo";
+import { InputField } from "@/components/ui/InputField";
+import { formatDateFR, formatTimeFR } from "@/lib/utils/formatDate";
+import { COPIED_RESET_MS } from "@/lib/constants";
 import type { TestResult, Doctor } from "@/lib/types";
 
 export function ResultScreen({
@@ -25,21 +28,16 @@ export function ResultScreen({
 
   const displayScore = test.scoreMethod === "average" ? Number(totalScore.toFixed(1)) : totalScore;
 
-  const handleCopy = () => {
-    const text = `${test.acronym} — ${patientName.toUpperCase()} ${patientFirstName} (${patientDob})\nScore : ${displayScore}/${test.maxScore} — ${scoring.label}\nDate : ${new Date().toLocaleDateString("fr-FR")} — ${doctor.title} ${doctor.lastName}`;
-    navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const handleCopy = async () => {
+    const text = `${test.acronym} — ${patientName.toUpperCase()} ${patientFirstName} (${patientDob})\nScore : ${displayScore}/${test.maxScore} — ${scoring.label}\nDate : ${formatDateFR()} — ${doctor.title} ${doctor.lastName}`;
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), COPIED_RESET_MS);
+    } catch {
+      // Clipboard API not available (e.g. non-HTTPS context)
+    }
   };
-
-  const InputField = ({ value, onChange, placeholder }: { value: string; onChange: (v: string) => void; placeholder: string }) => (
-    <input
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      placeholder={placeholder}
-      className="w-full bg-ds-offwhite/80 rounded-[14px] border border-ds-border/50 px-4 py-3.5 text-[14px] font-display text-ds-text placeholder:text-ds-text-muted/50 outline-none focus:border-ds-sky/40 focus:bg-white transition-all duration-200"
-    />
-  );
 
   return (
     <div className="pb-20 px-4 bg-ambient grain min-h-dvh max-w-2xl mx-auto sm:px-6">
@@ -119,7 +117,7 @@ export function ResultScreen({
               <div className="text-ds-text-secondary text-[12px] leading-6">
                 <strong className="text-ds-text">Patient :</strong> {patientName.toUpperCase()} {patientFirstName}<br />
                 <strong className="text-ds-text">Né(e) le :</strong> {patientDob || "—"}<br />
-                <strong className="text-ds-text">Date :</strong> {new Date().toLocaleDateString("fr-FR")} à {new Date().toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })}<br />
+                <strong className="text-ds-text">Date :</strong> {formatDateFR()} à {formatTimeFR()}<br />
                 <strong className="text-ds-text">Praticien :</strong> {doctor.title} {doctor.lastName}
               </div>
               <div

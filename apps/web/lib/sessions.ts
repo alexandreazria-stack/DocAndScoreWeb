@@ -39,7 +39,8 @@ export function getAllSessions(): Session[] {
     // Purge expired sessions (30 min)
     const now = Date.now();
     return sessions.filter((s) => s.expiresAt > now);
-  } catch {
+  } catch (err) {
+    console.error("[sessions] Failed to parse localStorage:", err);
     return [];
   }
 }
@@ -101,7 +102,8 @@ function getChannel(): BroadcastChannel | null {
   if (!channel) {
     try {
       channel = new BroadcastChannel(CHANNEL_NAME);
-    } catch {
+    } catch (err) {
+      console.error("[sessions] BroadcastChannel unavailable:", err);
       return null;
     }
   }

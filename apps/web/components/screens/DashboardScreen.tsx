@@ -7,6 +7,9 @@ import { ProgressBar } from "@/components/ui/ProgressBar";
 import { QUESTIONNAIRES } from "@/lib/questionnaires";
 import { getAllSessions, onSessionUpdate } from "@/lib/sessions";
 import { CALCULATORS } from "@/lib/calculators";
+import { SESSION_STATUS_CONFIG } from "@/lib/statusConfig";
+import { formatDateLongFR } from "@/lib/utils/formatDate";
+import { POLL_INTERVAL_MS } from "@/lib/constants";
 import type { Session } from "@/lib/sessions";
 import type { Questionnaire, Doctor, AppTab } from "@/lib/types";
 import type { Calculator } from "@/lib/calculators/types";
@@ -25,18 +28,13 @@ function ActiveSessionsBubble() {
     // Listen for BroadcastChannel updates
     const unsub = onSessionUpdate(() => refresh());
     // Also poll every 3s
-    const interval = setInterval(refresh, 3000);
+    const interval = setInterval(refresh, POLL_INTERVAL_MS);
     return () => { unsub(); clearInterval(interval); };
   }, []);
 
   if (sessions.length === 0) return null;
 
-  const statusConfig = {
-    waiting: { color: "#8899A8", icon: "⏳", label: "En attente" },
-    connected: { color: "#4A9ABF", icon: "📱", label: "Connecté" },
-    progress: { color: "#4A9ABF", icon: "✍️", label: "En cours" },
-    completed: { color: "#2FAF7E", icon: "✅", label: "Terminé" },
-  };
+  const statusConfig = SESSION_STATUS_CONFIG;
 
   return (
     <div className="mb-5 animate-fade-in-up">
@@ -143,7 +141,7 @@ export function DashboardScreen({
           Bonjour {doctor.title} {doctor.lastName}
         </h1>
         <p className="text-ds-text-muted text-[14px] mb-5 font-medium">
-          {new Date().toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })}
+          {formatDateLongFR()}
         </p>
       </div>
 
