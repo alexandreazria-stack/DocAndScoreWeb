@@ -8,3 +8,5 @@ dist/
 Thumbs.db
 ChatGPT Image*
 *.png
+
+.vercel

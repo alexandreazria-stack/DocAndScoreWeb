@@ -12,6 +12,8 @@ export default function PatientPage({ params }: { params: Promise<{ testId: stri
   const { testId, code } = use(params);
   const [test, setTest] = useState<Questionnaire | null>(null);
   const [doctorName, setDoctorName] = useState("");
+  const [initials, setInitials] = useState("");
+  const [started, setStarted] = useState(false);
   const [currentQ, setCurrentQ] = useState(0);
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [submitted, setSubmitted] = useState(false);
@@ -53,6 +55,16 @@ export default function PatientPage({ params }: { params: Promise<{ testId: stri
       setLoading(false);
     })();
   }, [testId, code]);
+
+  const handleStart = async () => {
+    const trimmed = initials.trim();
+    setStarted(true);
+    if (useRemote) {
+      await updateSessionRemote(code, { patientInitials: trimmed || undefined });
+    } else {
+      updateSession(code, { patientInitials: trimmed || undefined });
+    }
+  };
 
   const handleAnswer = (questionIdx: number, value: number) => {
     const newAnswers = { ...answers, [questionIdx]: value };
@@ -122,6 +134,47 @@ export default function PatientPage({ params }: { params: Promise<{ testId: stri
         <div className="mt-8 animate-fade-in stagger-4">
           <Logo size="sm" />
           <p className="text-[10px] text-ds-text-muted/50 mt-1">Aucune donnée personnelle stockée</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Intro screen: ask for initials before starting
+  if (!started) {
+    return (
+      <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, overflow: "auto", background: "#fff" }} className="flex flex-col items-center justify-center px-6 grain">
+        <div className="w-full max-w-sm">
+          <div className="text-center mb-8">
+            <Logo size="md" />
+            <p className="text-ds-text-muted text-[14px] mt-3 font-medium">
+              Prescrit par {doctorName}
+            </p>
+          </div>
+
+          <div className="bg-ds-offwhite/60 rounded-2xl p-5 border border-ds-border/40 mb-6">
+            <div className="text-[18px] font-extrabold mb-1">{test.name}</div>
+            <div className="text-[13px] text-ds-text-muted">{test.questions.length} questions · {test.duration}</div>
+          </div>
+
+          <label className="text-[12px] font-bold text-ds-text-secondary/80 uppercase tracking-wider block mb-2">
+            Vos initiales
+          </label>
+          <input
+            value={initials}
+            onChange={(e) => setInitials(e.target.value.toUpperCase().slice(0, 4))}
+            onKeyDown={(e) => { if (e.key === "Enter" && initials.trim().length > 0) handleStart(); }}
+            placeholder="ex: J.M."
+            className="w-full bg-ds-offwhite/80 rounded-[14px] border border-ds-border/50 px-4 py-3.5 text-[18px] font-bold text-ds-text text-center tracking-widest outline-none focus:border-ds-sky/40 focus:bg-white transition-all mb-6"
+            autoFocus
+          />
+
+          <button
+            onClick={handleStart}
+            disabled={initials.trim().length === 0}
+            className="w-full py-4 rounded-[16px] text-[16px] font-bold bg-gradient-to-r from-ds-sky to-[#3D8DB5] text-white shadow-md disabled:opacity-30 disabled:pointer-events-none hover:-translate-y-0.5 active:scale-[0.98] transition-all"
+          >
+            Commencer →
+          </button>
         </div>
       </div>
     );

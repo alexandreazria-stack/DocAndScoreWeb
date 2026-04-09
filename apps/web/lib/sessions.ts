@@ -9,6 +9,7 @@ export interface Session {
   code: string;
   testId: string;
   doctorName: string;
+  patientInitials?: string;
   status: "waiting" | "connected" | "progress" | "completed";
   answeredCount: number;
   totalQuestions: number;

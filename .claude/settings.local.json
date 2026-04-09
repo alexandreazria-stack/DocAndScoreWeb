@@ -44,7 +44,27 @@
       "Bash(railway version:*)",
       "Bash(npm i:*)",
       "Bash(vercel --prod)",
-      "Bash(railway status:*)"
+      "Bash(railway status:*)",
+      "Bash(vercel logs:*)",
+      "Bash(vercel inspect:*)",
+      "Bash(vercel build:*)",
+      "Bash(npm run:*)",
+      "Bash(vercel ls:*)",
+      "Bash(curl:*)",
+      "Bash(npx vercel:*)",
+      "Bash(sed:*)",
+      "Bash(sed -i 's/},,$$/},/g' lib/questionnaires/index.ts)",
+      "Bash(grep -c '},,\\\\s*$' lib/questionnaires/index.ts)",
+      "Bash(npm test:*)",
+      "Bash(./node_modules/.bin/vitest run:*)",
+      "Bash(wmic logicaldisk:*)",
+      "Bash(npm cache:*)",
+      "Bash(node_modules/.bin/vitest run:*)",
+      "Bash(npm ls:*)",
+      "Bash(/c/Users/alexa/DocAndScoreWeb/node_modules/.bin/vitest run:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
     ]
   }
 }

@@ -62,6 +62,7 @@ export interface TestResult {
   totalScore: number;
   scoring: ScoringBracket;
   sessionCode?: string;
+  patientInitials?: string;
 }
 
 export interface StoredResult {
@@ -76,6 +77,7 @@ export interface StoredResult {
   scoringColor: string;
   scoringSeverity: string;
   sessionCode: string | null;
+  patientInitials: string | null;
   createdAt: string;
 }
 

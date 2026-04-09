@@ -197,7 +197,6 @@ export default function Home() {
           onResult={(r) => {
             setResult(r);
             setScreen("result");
-            saveResultLocally(r);
           }}
           onShowPatient={() => setShowPatientDemo(true)}
         />

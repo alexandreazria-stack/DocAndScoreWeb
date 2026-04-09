@@ -9,6 +9,7 @@ import { createSessionRemote } from "@/lib/api";
 import { useSessionListener } from "@/hooks/useSessionListener";
 import { SESSION_STATUS_CONFIG } from "@/lib/statusConfig";
 import { SESSION_RESULT_DELAY_MS } from "@/lib/constants";
+import { saveResultLocally, addPendingQR } from "@/lib/history";
 import type { Session } from "@/lib/sessions";
 import type { Questionnaire, Doctor, TestResult } from "@/lib/types";
 
@@ -43,12 +44,14 @@ export function QRScreen({
         if (cancelled) return;
         setSession(s);
         setUrl(`${window.location.origin}/p/${test.id}/${s.code}`);
+        addPendingQR(s.code, test.id);
       } catch {
         // Fallback to localStorage
         const s = createSession(test.id, test.questions.length, doctorName);
         if (cancelled) return;
         setSession(s);
         setUrl(getPatientUrl(test.id, s.code));
+        addPendingQR(s.code, test.id);
       }
     })();
     return () => { cancelled = true; };
@@ -63,7 +66,10 @@ export function QRScreen({
       completedHandled.current = true;
       const score = updated.totalScore ?? 0;
       const bracket = getScoring(test, score);
-      setTimeout(() => onResult({ test, answers: updated.answers, totalScore: score, scoring: bracket, sessionCode: updated.code }), SESSION_RESULT_DELAY_MS);
+      const result = { test, answers: updated.answers, totalScore: score, scoring: bracket, sessionCode: updated.code, patientInitials: updated.patientInitials };
+      // Save immediately so result is preserved even if doctor navigates away
+      saveResultLocally(result);
+      setTimeout(() => onResult(result), SESSION_RESULT_DELAY_MS);
     }
   }, [test, onResult]);
 

@@ -8,6 +8,7 @@ interface Session {
   code: string;
   testId: string;
   doctorName: string;
+  patientInitials?: string;
   status: "waiting" | "connected" | "progress" | "completed";
   answeredCount: number;
   totalQuestions: number;
@@ -45,6 +46,8 @@ const app = Fastify({ logger: true });
 const ALLOWED_ORIGINS = [
   "http://localhost:3000",
   "http://localhost:4000",
+  "https://docandscore.fr",
+  "https://www.docandscore.fr",
   process.env.FRONTEND_URL,
 ].filter(Boolean) as string[];
 
@@ -105,7 +108,7 @@ app.patch<{ Params: { code: string }; Body: Partial<Session> }>(
     const session = sessions.get(req.params.code);
     if (!session) return reply.status(404).send({ error: "Session not found" });
 
-    const allowed = ["status", "answeredCount", "answers", "totalScore"] as const;
+    const allowed = ["status", "answeredCount", "answers", "totalScore", "patientInitials"] as const;
     for (const key of allowed) {
       if (req.body[key] !== undefined) {
         (session as any)[key] = req.body[key];

@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { loadLocalHistory } from "@/lib/history";
+import { loadLocalHistory, recoverCompletedSessions } from "@/lib/history";
 import { formatDateFR, formatTimeFR } from "@/lib/utils/formatDate";
 import type { StoredResult } from "@/lib/types";
 
@@ -9,8 +9,10 @@ export function HistoryScreen({ onBack }: { onBack: () => void }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setResults(loadLocalHistory());
-    setLoading(false);
+    recoverCompletedSessions().finally(() => {
+      setResults(loadLocalHistory());
+      setLoading(false);
+    });
   }, []);
 
   const grouped = results.reduce<Record<string, StoredResult[]>>((acc, r) => {
@@ -74,6 +76,11 @@ export function HistoryScreen({ onBack }: { onBack: () => void }) {
                         {r.sessionCode && (
                           <span className="text-[10px] font-mono text-ds-text-muted bg-ds-offwhite px-1.5 py-0.5 rounded-full shrink-0">
                             QR
+                          </span>
+                        )}
+                        {r.patientInitials && (
+                          <span className="text-[10px] font-bold text-ds-sky bg-ds-sky/8 px-1.5 py-0.5 rounded-full shrink-0">
+                            {r.patientInitials}
                           </span>
                         )}
                       </div>
