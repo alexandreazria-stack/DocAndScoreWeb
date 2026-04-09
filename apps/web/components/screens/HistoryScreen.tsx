@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { loadTestHistory } from "@/lib/supabase";
+import { loadLocalHistory } from "@/lib/history";
 import { formatDateFR, formatTimeFR } from "@/lib/utils/formatDate";
 import type { StoredResult } from "@/lib/types";
 
@@ -9,10 +9,8 @@ export function HistoryScreen({ onBack }: { onBack: () => void }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    loadTestHistory().then((data) => {
-      setResults(data);
-      setLoading(false);
-    });
+    setResults(loadLocalHistory());
+    setLoading(false);
   }, []);
 
   const grouped = results.reduce<Record<string, StoredResult[]>>((acc, r) => {

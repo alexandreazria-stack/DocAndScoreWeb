@@ -13,7 +13,8 @@ import { CalculatorScreen } from "@/components/screens/CalculatorScreen";
 import { HistoryScreen } from "@/components/screens/HistoryScreen";
 import { BottomNav } from "@/components/ui/BottomNav";
 import { useState, useEffect } from "react";
-import { supabase, loadProfile, saveProfile, saveTestResult } from "@/lib/supabase";
+import { supabase, loadProfile, saveProfile } from "@/lib/supabase";
+import { saveResultLocally } from "@/lib/history";
 import type { Questionnaire } from "@/lib/types";
 import type { Calculator } from "@/lib/calculators/types";
 
@@ -176,7 +177,7 @@ export default function Home() {
           onResult={(r) => {
             setResult(r);
             setScreen("result");
-            saveTestResult(r).catch(console.error);
+            saveResultLocally(r);
           }}
         />
       )}
@@ -196,7 +197,7 @@ export default function Home() {
           onResult={(r) => {
             setResult(r);
             setScreen("result");
-            saveTestResult(r).catch(console.error);
+            saveResultLocally(r);
           }}
           onShowPatient={() => setShowPatientDemo(true)}
         />
