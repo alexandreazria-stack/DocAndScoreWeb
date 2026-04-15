@@ -10,6 +10,7 @@ import { QRScreen } from "@/components/screens/QRScreen";
 import { PatientScreen } from "@/components/screens/PatientScreen";
 import { SettingsScreen } from "@/components/screens/SettingsScreen";
 import { CalculatorScreen } from "@/components/screens/CalculatorScreen";
+import { Score2DiabetesScreen } from "@/components/screens/Score2DiabetesScreen";
 import { HistoryScreen } from "@/components/screens/HistoryScreen";
 import { BottomNav } from "@/components/ui/BottomNav";
 import { useState, useEffect } from "react";
@@ -31,6 +32,14 @@ export default function Home() {
   // Listen for Supabase auth state
   useEffect(() => {
     let isMounted = true;
+
+    // Dev bypass: restored doctor + devBypass flag from localStorage → skip Supabase.
+    const persisted = useAppStore.getState();
+    if (persisted.devBypass && persisted.doctor) {
+      setScreen("app");
+      setAuthReady(true);
+      return;
+    }
 
     // Safety net: if Supabase hangs (e.g. paused project, network issue),
     // always unblock the UI after 6s and show login screen.
@@ -66,6 +75,7 @@ export default function Home() {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
       // Read current screen from store directly to avoid stale closure
       const currentScreen = useAppStore.getState().screen;
+      const devBypass = useAppStore.getState().devBypass;
       if (session && currentScreen === "login") {
         const profile = await loadProfile();
         if (profile) {
@@ -75,7 +85,8 @@ export default function Home() {
           setScreen("onboarding");
         }
       }
-      if (!session) {
+      // Don't kick the user back to login when the dev bypass is active
+      if (!session && !devBypass) {
         setScreen("login");
       }
     });
@@ -126,13 +137,18 @@ export default function Home() {
 
   if (!doctor) return shell(<LoginScreen onLogin={handleLogin} />);
 
-  if (screen === "calculator" && selectedCalculator) return shell(
-    <CalculatorScreen
-      calculator={selectedCalculator}
-      doctor={doctor}
-      onBack={goHome}
-    />
-  );
+  if (screen === "calculator" && selectedCalculator) {
+    if (selectedCalculator.id === "score2-diabetes") {
+      return shell(<Score2DiabetesScreen doctor={doctor} onBack={goHome} />);
+    }
+    return shell(
+      <CalculatorScreen
+        calculator={selectedCalculator}
+        doctor={doctor}
+        onBack={goHome}
+      />
+    );
+  }
 
   if (showPatientDemo && selectedTest) {
     return shell(

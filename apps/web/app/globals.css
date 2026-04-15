@@ -277,6 +277,37 @@ input[type="range"]::-moz-range-thumb {
   filter: drop-shadow(0 2px 8px rgba(74,154,191,0.2));
 }
 
+/* ═══════ LIQUID GLASS (Dashboard refresh) ═══════ */
+@keyframes shimmer-gold {
+  0%, 100% { background-position: 0% 0%; }
+  50%      { background-position: 100% 100%; }
+}
+
+@keyframes shimmer-border {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+.liquid-border {
+  background: linear-gradient(90deg, #4A9ABF, #7BBDD9, #DFF0F8, #7BBDD9, #4A9ABF);
+  background-size: 200% 100%;
+  animation: shimmer-border 6s linear infinite;
+}
+
+@keyframes aurora-sweep {
+  0%   { transform: translateX(-120%) rotate(8deg); }
+  100% { transform: translateX(220%)  rotate(8deg); }
+}
+
+.aurora-sweep::before {
+  content: '';
+  position: absolute;
+  inset: -50% -30%;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.4) 50%, transparent 100%);
+  animation: aurora-sweep 5s ease-in-out infinite;
+  pointer-events: none;
+}
+
 /* ═══════ NOISE TEXTURE (subtle grain) ═══════ */
 .grain::after {
   content: '';

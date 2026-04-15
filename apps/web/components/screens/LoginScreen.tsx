@@ -3,8 +3,17 @@ import { useState } from "react";
 import { Logo } from "@/components/ui/Logo";
 import { PasswordInput } from "@/components/ui/Input";
 import { supabase } from "@/lib/supabase";
+import { useAppStore } from "@/stores/useAppStore";
+
+// Dev shortcut — bypasses Supabase entirely so local testing doesn't require
+// creating an account every time. Not exposed in production builds.
+const DEV_EMAIL = "test@test.fr";
+const DEV_PASSWORD = "password";
 
 export function LoginScreen({ onLogin }: { onLogin: () => void }) {
+  const setDoctor = useAppStore((s) => s.setDoctor);
+  const setDevBypass = useAppStore((s) => s.setDevBypass);
+  const setScreen = useAppStore((s) => s.setScreen);
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -24,6 +33,21 @@ export function LoginScreen({ onLogin }: { onLogin: () => void }) {
       setError("Les mots de passe ne correspondent pas");
       return;
     }
+
+    // Dev shortcut: test@test.fr / password → inject a fake doctor, skip Supabase
+    if (email === DEV_EMAIL && password === DEV_PASSWORD) {
+      setDoctor({
+        title: "Dr.",
+        firstName: "Test",
+        lastName: "Médecin",
+        specialty: "Médecine générale",
+        email: DEV_EMAIL,
+      });
+      setDevBypass(true);
+      setScreen("app");
+      return;
+    }
+
     setLoading(true);
     try {
       if (isSignUp) {
